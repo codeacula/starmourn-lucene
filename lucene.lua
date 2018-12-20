@@ -60,6 +60,7 @@ Lucene.boot = function()
 
     Lucene.import("ui/ui")
     Lucene.import("chat")
+    Lucene.import("maps")
     Lucene.import("callbacks")
 
     raiseEvent("Lucene.bootstrap")
@@ -116,3 +117,7 @@ Lucene.warn = function(text)
 end
 
 Lucene.boot()
+
+gmod.registerUser("lucene")
+gmod.enableModule("lucene", "Comm.Channel")
+sendGMCP("Core.Supports.Add [ \"Comm.Channel 1\" ]")

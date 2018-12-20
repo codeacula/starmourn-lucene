@@ -33,9 +33,15 @@ Lucene.styles.chatActive = [[
 ]]
 
 Lucene.styles.chatAlert = [[
-    background-color: #043605;
+    background-color: rgba(226, 103, 255, .5);
     border-left: 1px solid black;
     border-bottom: 2px solid #f25118;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+]]
+
+Lucene.styles.chatFooter = [[
+    background-color: rgba(0, 0, 0, .5);
+    border-bottom: 2px solid #FFFFFF;
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
 ]]
 

@@ -16,7 +16,7 @@ Lucene.ui.sides.right.label:setStyleSheet(Lucene.styles.rightLabel)
 Lucene.ui.sides.right.chatContainer = Lucene.containers.container({
     name="chatContainer",
     x = px(0), y = px(0),
-    width = "100%", height = "50%"
+    width = "100%", height = "35%"
 }, Lucene.ui.sides.right.container)
 
 Lucene.ui.sides.right.chatHeader = Lucene.containers.hbox({
@@ -32,9 +32,7 @@ Lucene.ui.sides.right.chatFooter = Lucene.containers.label({
   height = "90%",
 }, Lucene.ui.sides.right.chatContainer)
 
-Lucene.ui.sides.right.chatFooter:setStyleSheet([[
-    background-color: #050F2B;
-]])
+Lucene.ui.sides.right.chatFooter:setStyleSheet(Lucene.styles.chatFooter)
 
 Lucene.ui.sides.right.mapContainer = Lucene.containers.container({
     name="mapContainer",

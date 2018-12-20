@@ -18,12 +18,12 @@ function Lucene.chats.addChat(name)
     local newWindow = Lucene.containers.console({
         name = name.."ChatWindow",
         x = 0, y = 0,
-        height = "100%", width = "100%"
+        height = "98%", width = "100%"
     }, Lucene.ui.sides.right.chatFooter)
 
     newWindow:setFontSize(10)
-    newWindow:setWrap(math.floor(Lucene.settings.border.right / Lucene.chats.divisor))
-    newWindow:setColor(0, 0, 0, 50)
+    newWindow:enableAutoWrap()
+    newWindow:setColor(0, 0, 0, 150)
 
     newWindow:hide()
 
@@ -72,5 +72,3 @@ for _, tab in ipairs(Lucene.settings.tabs) do
         Lucene.chats.showChat(tab)
     end
 end
-
-gmod.enableModule("harmony", "Comm.Channel")
