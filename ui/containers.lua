@@ -1,4 +1,6 @@
 Lucene.containers = {}
+Lucene.containers.windows = {}
+
 Lucene.containers.checkName = function(name)
     if not name then
         Lucene.say("No name was given for the container.")
