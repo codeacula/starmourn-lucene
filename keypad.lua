@@ -40,7 +40,7 @@ Lucene.keypads.ship = {
     look = "map",
     map = function()
         Lucene.keypads.ship.currentPower = 0
-        send(("ship thrust %s"):format(Lucene.keypads.ship.currentPower))
+        send("ship halt")
     end,
     n = "ship turn n",
     ne = "ship turn ne",
@@ -58,6 +58,10 @@ Lucene.keypads.ship = {
         end
 
         if Lucene.keypads.ship.currentPower == 0 then
+            Lucene.keypads.ship.currentPower = 10
+        end
+
+        if Lucene.keypads.ship.currentPower == 5 then
             Lucene.keypads.ship.currentPower = 10
         end
 
