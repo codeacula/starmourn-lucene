@@ -5,6 +5,10 @@ for k, v in pairs(BaseContainer) do
 end
 Window.__index = Window
 
+function Window:addImage(imagePath)
+    return Image:new(imagePath, self)
+end
+
 function Window:create()
     res = WindowCreate(self.actualname, self.actualx, self.actualy, self.actualwidth, self.actualheight, 0, 2, self.colorCode)
 end

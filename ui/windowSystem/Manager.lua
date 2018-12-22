@@ -34,3 +34,4 @@ WindowManager.updateMainWindow()
 
 Lucene.runFile("ui/windowSystem/BaseContainer.lua")
 Lucene.runFile("ui/windowSystem/Window.lua")
+Lucene.runFile("ui/windowSystem/Image.lua")
