@@ -11,7 +11,7 @@ Lucene.runFile("pluginCallbacks.lua")
 Lucene.runFile("ui/ui.lua")
 
 local windowHandle = WindowManager.createWindow({
-    x = "50%", y = "50%",
-    width = "50%", height = "50%",
+    x = "55%", y = 0,
+    width = "45%", height = "100%",
     name = "crow", color = "green"
 })

@@ -23,6 +23,7 @@ end
 
 function BaseContainer:calculateRelativePosition(key, parentKey)
     local selfValue = self[key]
+    local parentPositionValue = self.parent["actual"..key]
     local parentValue = self.parent["actual"..parentKey]
     
     if not parentValue then
@@ -36,7 +37,7 @@ function BaseContainer:calculateRelativePosition(key, parentKey)
         return tonumber(math.floor(parentValue * percent))
     end
 
-    return tonumber(parentValue + selfValue)
+    return tonumber(parentPositionValue + selfValue)
 end
 
 function BaseContainer:calculateRelativeValue(key)
