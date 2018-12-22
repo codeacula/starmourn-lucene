@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE muclient>
+<muclient>
+<plugin
+   name="Lucene"
+   author="Dariel (codeacula@codeacula.com)"
+   id="e28caa053e5d361eb4e0c9a4"
+   language="Lua"
+   purpose="A multi-purpose system for Starmourn"
+   date_written="2018-12-21 17:05:24"
+   requires="5.05"
+   version="1.0"
+   >
+</plugin>
+
+<include name="constants.lua"/>
+
+<aliases>
+<alias
+   match="^gmcpdebug (\d)$"
+   enabled="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+>
+<send>if gmcpdebug then
+gmcpdebug(tonumber("%1"))
+else
+ColourNote("red", "", "You don't have GMCP ran yet")
+end</send>
+</alias>
+
+<alias
+   match="^sendgmcp (.*?)$"
+   enabled="y"
+   regexp="y"
+   send_to="12"
+   sequence="100"
+>
+<send>if sendgmcp then
+sendgmcp("\1")
+else
+ColourNote("red", "", "You don't have GMCP ran yet")
+end</send>
+</alias>
+
+<alias
+   script="resetLucene"
+   match="^`r$"
+   enabled="y"
+   regexp="y"
+   sequence="100"
+   ignore_case="y"
+></alias>
+
+</aliases>
+
+<script>
+<![CDATA[
+function loadLucene()
+   Note("Loading Lucene")
+   local homeDir = GetInfo(68)
+   dofile(homeDir.."lucene\\lucene.lua")
+end
+
+function resetLucene()
+   Lucene = null
+   loadLucene()
+end
+
+loadLucene()
+]]>
+</script>
+
+</muclient>
