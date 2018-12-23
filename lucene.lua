@@ -51,12 +51,16 @@ Lucene.runFile("pluginCallbacks.lua")
 Lucene.runFile("ui/ui.lua")
 
 local windowHandle = WindowManager.createWindow({
-    x = "55%", y = 0,
-    width = "45%", height = "100%",
+    x = "50%", y = 0,
+    width = "50%", height = "100%",
     name = "crow", color = "green"
 })
 
-local backgroundImage = windowHandle:addImage(Lucene.getPath("background.png"))
-backgroundImage:show({
-    name = "backgroundImage"
+local backgroundImage = windowHandle:addImage({
+    name = "backgroundImage",
+    path = Lucene.getPath("background.png")
 })
+backgroundImage:show()
+windowHandle:setZ(-2)
+
+WindowSetZOrder("main", 1)

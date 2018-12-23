@@ -2,11 +2,13 @@ require("tprint")
 BaseContainer = {}
 BaseContainer.__index = BaseContainer
 
-BaseContainer.actualheight = 0
-BaseContainer.actualwidth = 0
-BaseContainer.actualx = 0
-BaseContainer.actualy = 0
-BaseContainer.actualname = ""
+BaseContainer.calculated = {
+    height = 0,
+    name = "",
+    width = 0,
+    y = 0,
+    x = 0
+}
 BaseContainer.color = "#000000"
 BaseContainer.colorCode = 0
 BaseContainer.x = 0
@@ -15,16 +17,26 @@ BaseContainer.width = 0
 BaseContainer.height = 0
 
 function BaseContainer:calculateMeasurements()
-    self.actualx = self:calculateRelativePosition("x", "width")
-    self.actualy = self:calculateRelativePosition("y", "height")
-    self.actualheight = self:calculateRelativeValue("height")
-    self.actualwidth = self:calculateRelativeValue("width")
+    self.calculated.x = self:calculateRelativePosition("x", "width")
+    self.calculated.y = self:calculateRelativePosition("y", "height")
+    self.calculated.height = self:calculateRelativeValue("height")
+    self.calculated.width = self:calculateRelativeValue("width")
+
+    if not self.children then
+        return
+    end
+
+    for _, v in ipairs(self.children) do
+        if v.calculateMeasurements then
+            v:calculateMeasurements()
+        end
+    end
 end
 
 function BaseContainer:calculateRelativePosition(key, parentKey)
     local selfValue = self[key]
-    local parentPositionValue = self.parent["actual"..key]
-    local parentValue = self.parent["actual"..parentKey]
+    local parentPositionValue = self.parent.calculated[key]
+    local parentValue = self.parent.calculated[parentKey]
     
     if not parentValue then
         return tonumber(selfValue)
@@ -42,7 +54,7 @@ end
 
 function BaseContainer:calculateRelativeValue(key)
     local selfValue = self[key]
-    local parentValue = self.parent["actual"..key]
+    local parentValue = self.parent.calculated[key]
     
     if not parentValue then
         return tonumber(selfValue)
@@ -59,15 +71,49 @@ function BaseContainer:calculateRelativeValue(key)
 end
 
 function BaseContainer:create()
-    WindowCreate(self.actualname, self.actualx, self.actualy, self.actualwidth, self.actualheight, 0, 2, self.colorCode)
+    WindowCreate(self.calculated.name, self.calculated.x, self.calculated.y, self.calculated.width, self.calculated.height, 0, 2, self.colorCode)
+end
+
+function BaseContainer:hide()
+    WindowShow(self.calculated.name, hide)
+
+    if not self.children then
+        return
+    end
+
+    for _, v in ipairs(self.children) do
+        if v.hide then
+            v:hide()
+        end
+    end
 end
 
 function BaseContainer:reposition()
-    WindowPosition(self.actualname, self.actualx, self.actualy, 0, 2)
+    WindowPosition(self.calculated.name, self.calculated.x, self.calculated.y, 0, 2)
+
+    if not self.children then
+        return
+    end
+
+    for _, v in ipairs(self.children) do
+        if v.reposition then
+            v:reposition()
+        end
+    end
 end
 
 function BaseContainer:resize()
-    WindowResize(self.actualname, self.actualwidth, self.actualheight, self.colorCode)
+    WindowResize(self.calculated.name, self.calculated.width, self.calculated.height, self.colorCode)
+
+    if not self.children then
+        return
+    end
+
+    for _, v in ipairs(self.children) do
+        if v.resize then
+            v:resize()
+        end
+    end
 end
 
 function BaseContainer:setColor(color)
@@ -91,11 +137,11 @@ function BaseContainer:setParent(parent)
     self.parent = WindowManager.systemWindow
 
     -- Check to make sure the parent has values that we can use. If not, we can't set it
-    if not parent or parent.actualx == nil or parent.actualy == nil then
+    if not parent or parent.calculated.x == nil or parent.calculated.y == nil then
         return
     end
 
-    if parent.actualheight == nil or parent.actualwidth == nil then
+    if parent.calculated.height == nil or parent.calculated.width == nil then
         return
     end
 
@@ -104,11 +150,21 @@ end
 
 function BaseContainer:setName(name)
     self.name = name
-    self.actualname = name..GetPluginID()
+    self.calculated.name = name..GetPluginID()
 end
 
 function BaseContainer:show()
-    WindowShow(self.actualname, true)
+    WindowShow(self.calculated.name, true)
+
+    if not self.children then
+        return
+    end
+
+    for _, v in ipairs(self.children) do
+        if v.show then
+            v:show()
+        end
+    end
 end
 
 function BaseContainer:update()

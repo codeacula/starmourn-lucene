@@ -5,10 +5,13 @@ for k, v in pairs(BaseContainer) do
 end
 Image.__index = Image
 
-Image.actualbottom = 0
-Image.actualleft = 0
-Image.actualright = 0
-Image.actualtop = 0
+Image.calculated = {
+    height = 0,
+    name = "",
+    width = 0,
+    y = 0,
+    x = 0
+}
 Image.bottom = 0
 Image.left = 0
 Image.name = ""
@@ -38,13 +41,22 @@ function Image:new(settings, parent)
         end
     end
 
+    image.calculated = {
+        bottom = 0,
+        height = 0,
+        left = 0,
+        right = 0,
+        name = "",
+        top = 0,
+        width = 0
+    }
     image:setName(image.name)
     image.parent = parent
 
-    WindowLoadImage(image.parent.actualname, image.actualname, image.path)
+    WindowLoadImage(image.parent.calculated.name, image.calculated.name, image.path)
     return image
 end
 
 function Image:show()
-    Note(WindowDrawImageAlpha(self.parent.actualname, self.actualname, self.actualleft, self.actualtop, self.actualright, self.actualbottom, self.opactity, self.srcleft, self.srctop))
+    WindowDrawImageAlpha(self.parent.calculated.name, self.calculated.name, self.calculated.left, self.calculated.top, self.calculated.right, self.calculated.bottom, self.opactity, self.srcleft, self.srctop)
 end

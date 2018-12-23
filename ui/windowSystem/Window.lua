@@ -5,16 +5,20 @@ for k, v in pairs(BaseContainer) do
 end
 Window.__index = Window
 
-function Window:addImage(imagePath)
-    return Image:new(imagePath, self)
+function Window:addImage(settings)
+    local newImage = Image:new(settings, self)
+    table.insert(self.children, newImage)
+    return newImage
 end
 
 function Window:create()
-    res = WindowCreate(self.actualname, self.actualx, self.actualy, self.actualwidth, self.actualheight, 0, 2, self.colorCode)
+    res = WindowCreate(self.calculated.name, self.calculated.x, self.calculated.y, self.calculated.width, self.calculated.height, 0, 2, self.colorCode)
 end
 
 function Window:new(settings, parent)
-    local newWindow = {}
+    local newWindow = {
+        children = {}
+    }
 
     for k, v in pairs(self) do
         newWindow[k] = v
@@ -27,6 +31,14 @@ function Window:new(settings, parent)
         end
     end
 
+    newWindow.calculated = {
+        height = 0,
+        name = "",
+        width = 0,
+        y = 0,
+        x = 0
+    }
+
     newWindow:setParent(parent)
     newWindow:setName(newWindow.name)
     newWindow:setColor("green")
@@ -35,4 +47,8 @@ function Window:new(settings, parent)
     newWindow:show()
 
     return newWindow
+end
+
+function Window:setZ(zIndex)
+    WindowSetZOrder(self.calculated.name, zIndex)
 end
