@@ -23,8 +23,27 @@ Image.srcleft = 0
 Image.srctop = 0
 Image.top = 0
 
-function Image:calculatePosition()
+function Image:calculateRelativeValue(key, parentKey)
+    local selfValue = self[key]
+    local parentValue = self.parent.calculated[parentKey]
+    
+    if not parentValue then
+        return tonumber(selfValue)
+    end
 
+    if string.find(selfValue, "%%") then
+        local subbedNumber = selfValue:gsub("%%", "")
+        local percent = tonumber(subbedNumber) / 100
+    
+        return tonumber(math.floor(parentValue * percent))
+    end
+
+    return tonumber(selfValue)
+end
+
+function Image:calculateMeasurements()
+    self.calculated.left = self:calculateRelativeValue("left", "x")
+    self.calculated.top = self:calculateRelativeValue("top", "y")
 end
 
 function Image:new(settings, parent)
@@ -52,11 +71,36 @@ function Image:new(settings, parent)
     }
     image:setName(image.name)
     image.parent = parent
+    image:calculateMeasurements()
 
     WindowLoadImage(image.parent.calculated.name, image.calculated.name, image.path)
     return image
 end
 
+function Image:reposition()
+    WindowDrawImageAlpha(
+        self.parent.calculated.name,
+        self.calculated.name,
+        self.calculated.left,
+        self.calculated.top,
+        self.calculated.right,
+        self.calculated.bottom,
+        self.opactity,
+        self.srcleft,
+        self.srctop
+    )
+end
+
 function Image:show()
-    WindowDrawImageAlpha(self.parent.calculated.name, self.calculated.name, self.calculated.left, self.calculated.top, self.calculated.right, self.calculated.bottom, self.opactity, self.srcleft, self.srctop)
+    WindowDrawImageAlpha(
+        self.parent.calculated.name,
+        self.calculated.name,
+        self.calculated.left,
+        self.calculated.top,
+        self.calculated.right,
+        self.calculated.bottom,
+        self.opactity,
+        self.srcleft,
+        self.srctop
+    )
 end

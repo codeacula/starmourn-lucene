@@ -1,4 +1,3 @@
-require("tprint")
 BaseContainer = {}
 BaseContainer.__index = BaseContainer
 
@@ -33,20 +32,19 @@ function BaseContainer:calculateMeasurements()
     end
 end
 
-function BaseContainer:calculateRelativePosition(key, parentKey)
+function BaseContainer:calculateRelativePosition(key, measurement)
     local selfValue = self[key]
     local parentPositionValue = self.parent.calculated[key]
-    local parentValue = self.parent.calculated[parentKey]
+    local parentMeasurement = self.parent.calculated[measurement]
     
-    if not parentValue then
+    if not parentMeasurement then
         return tonumber(selfValue)
     end
 
     if string.find(selfValue, "%%") then
         local subbedNumber = selfValue:gsub("%%", "")
-        local percent = tonumber(subbedNumber) / 100
-    
-        return tonumber(math.floor(parentValue * percent))
+        local percent = tonumber(subbedNumber) / 100    
+        return tonumber(parentPositionValue + math.floor(parentMeasurement * percent))
     end
 
     return tonumber(parentPositionValue + selfValue)

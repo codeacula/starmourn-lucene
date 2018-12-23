@@ -1,3 +1,6 @@
+require("json")
+require("tprint")
+
 local homeDirectory = GetInfo(68).."lucene"
 
 Lucene = {}
@@ -54,13 +57,10 @@ local windowHandle = WindowManager.createWindow({
     x = "50%", y = 0,
     width = "50%", height = "100%",
     name = "crow", color = "green"
-})
+}, WindowManager.sides.right)
 
 local backgroundImage = windowHandle:addImage({
     name = "backgroundImage",
     path = Lucene.getPath("background.png")
 })
 backgroundImage:show()
-windowHandle:setZ(-2)
-
-WindowSetZOrder("main", 1)

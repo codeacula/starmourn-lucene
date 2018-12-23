@@ -1,4 +1,3 @@
-require("tprint")
 WindowManager = {}
 
 WindowManager.systemWindow = {
@@ -58,11 +57,11 @@ function WindowManager.calculateSide(side)
     side.calculated.x = WindowManager.calculateRelativeValue(side.x, WindowManager.systemWindow.width)
     side.calculated.y = WindowManager.calculateRelativeValue(side.y, WindowManager.systemWindow.height)
     side.calculated.width = WindowManager.calculateRelativeValue(side.width, WindowManager.systemWindow.width)
-    side.calculated.height = WindowManager.calculateRelativeValue(side.height, WindowManager.systemWindow.height) 
+    side.calculated.height = WindowManager.calculateRelativeValue(side.height, WindowManager.systemWindow.height)
 end
 
-function WindowManager.createWindow(params)
-    local newWindow = Window:new(params)
+function WindowManager.createWindow(params, parent)
+    local newWindow = Window:new(params, parent)
 
     table.insert(WindowManager.windows, newWindow)
 
@@ -103,7 +102,7 @@ function WindowManager.updateMainWindow()
         5,  -- BorderOffset, 
         ColourNameToRGB ("black"),    -- BorderColour, 
         2,  -- BorderWidth, 
-        ColourNameToRGB ("silver"),  -- OutsideFillColour, 
+        ColourNameToRGB("#000433"),  -- OutsideFillColour, 
         0) -- OutsideFillStyle (fine hatch)
         
     -- Update each window
