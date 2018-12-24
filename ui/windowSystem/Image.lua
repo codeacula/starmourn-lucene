@@ -15,7 +15,7 @@ Image.calculated = {
 Image.bottom = 0
 Image.left = 0
 Image.name = ""
-Image.opactiy = 1
+Image.opacity = 1
 Image.parentWindow = nil
 Image.path = ""
 Image.right = 0
@@ -85,7 +85,7 @@ function Image:reposition()
         self.calculated.top,
         self.calculated.right,
         self.calculated.bottom,
-        self.opactity,
+        self.opacity,
         self.srcleft,
         self.srctop
     )
@@ -99,7 +99,7 @@ function Image:show()
         self.calculated.top,
         self.calculated.right,
         self.calculated.bottom,
-        self.opactity,
+        self.opacity,
         self.srcleft,
         self.srctop
     )

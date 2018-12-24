@@ -12,12 +12,13 @@ function Window:addImage(settings)
 end
 
 function Window:create()
-    res = WindowCreate(self.calculated.name, self.calculated.x, self.calculated.y, self.calculated.width, self.calculated.height, 0, 2, self.colorCode)
+    res = WindowCreate(self.calculated.name, self.calculated.x, self.calculated.y, self.calculated.width, self.calculated.height, 0, self.flags, self.colorCode)
 end
 
 function Window:new(settings, parent)
     local newWindow = {
-        children = {}
+        children = {},
+        flags = 2
     }
 
     for k, v in pairs(self) do
@@ -41,7 +42,7 @@ function Window:new(settings, parent)
 
     newWindow:setParent(parent)
     newWindow:setName(newWindow.name)
-    newWindow:setColor("green")
+    newWindow:setColor("black")
     newWindow:calculateMeasurements()
     newWindow:create()
     newWindow:show()

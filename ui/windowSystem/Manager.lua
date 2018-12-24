@@ -22,7 +22,8 @@ WindowManager.sides = { -- For the top, bottom, left, right, & output
     },
     output = {
         x = 0, y = 0,
-        width = 0, height = 0
+        width = 0, height = 0,
+        calculated = {}
     },
     right = {
         calculated = {},
@@ -88,21 +89,21 @@ function WindowManager.updateMainWindow()
     WindowManager.calculateSide(WindowManager.sides.right)
 
     -- Now figure out the viewport
-    WindowManager.sides.output.x = WindowManager.sides.left.calculated.width
-    WindowManager.sides.output.y = WindowManager.sides.top.calculated.height
-    WindowManager.sides.output.height = WindowManager.sides.bottom.calculated.y - WindowManager.sides.top.calculated.height
-    WindowManager.sides.output.width = WindowManager.sides.right.calculated.x - WindowManager.sides.left.calculated.width
+    WindowManager.sides.output.calculated.x = WindowManager.sides.left.calculated.width
+    WindowManager.sides.output.calculated.y = WindowManager.sides.top.calculated.height
+    WindowManager.sides.output.calculated.height = WindowManager.sides.bottom.calculated.y - WindowManager.sides.top.calculated.height
+    WindowManager.sides.output.calculated.width = WindowManager.sides.right.calculated.x - WindowManager.sides.left.calculated.width
 
     -- Set the output size
     TextRectangle(
-        WindowManager.sides.output.x,
-        WindowManager.sides.output.y,
-        WindowManager.sides.output.x + WindowManager.sides.output.width,
-        WindowManager.sides.output.y + WindowManager.sides.output.height,
+        WindowManager.sides.output.calculated.x,
+        WindowManager.sides.output.calculated.y,
+        WindowManager.sides.output.calculated.x + WindowManager.sides.output.calculated.width,
+        WindowManager.sides.output.calculated.y + WindowManager.sides.output.calculated.height,
         5,  -- BorderOffset, 
         ColourNameToRGB ("black"),    -- BorderColour, 
         2,  -- BorderWidth, 
-        ColourNameToRGB("#000433"),  -- OutsideFillColour, 
+        ColourNameToRGB("black"),  -- OutsideFillColour, 
         0) -- OutsideFillStyle (fine hatch)
         
     -- Update each window

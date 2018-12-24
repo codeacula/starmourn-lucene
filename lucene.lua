@@ -52,15 +52,3 @@ end
 Lucene.runFile("gmcp.lua")
 Lucene.runFile("pluginCallbacks.lua")
 Lucene.runFile("ui/ui.lua")
-
-local windowHandle = WindowManager.createWindow({
-    x = "50%", y = 0,
-    width = "50%", height = "100%",
-    name = "crow", color = "green"
-}, WindowManager.sides.right)
-
-local backgroundImage = windowHandle:addImage({
-    name = "backgroundImage",
-    path = Lucene.getPath("background.png")
-})
-backgroundImage:show()
