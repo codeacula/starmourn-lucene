@@ -58,10 +58,9 @@ Lucene.boot = function()
     Lucene.import("utilities")
     Lucene.import("keypad")
 
+    Lucene.import("room")
+
     Lucene.import("ui/ui")
-    Lucene.import("chat")
-    Lucene.import("maps")
-    Lucene.import("callbacks")
 
     raiseEvent("Lucene.bootstrap")
     Lucene.say("Thank you for your patience. I await your command.")
@@ -120,4 +119,5 @@ Lucene.boot()
 
 gmod.registerUser("lucene")
 gmod.enableModule("lucene", "Comm.Channel")
-sendGMCP("Core.Supports.Add [ \"Comm.Channel 1\" ]")
+gmod.enableModule("lucene", "IRE.CombatMessage")
+sendGMCP("Core.Supports.Add [ \"Comm.Channel 1\", \"IRE.CombatMessage 1\" ]")

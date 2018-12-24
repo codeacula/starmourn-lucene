@@ -64,7 +64,7 @@ Lucene.styles.healthBack = [[
 ]]
 
 Lucene.styles.infoBox = [[
-    QLabel{
+    QLabel {
         background-color: rgba(0, 0, 0, .7);
         border: 1px solid rgba(0, 0, 0, .8);
         font-family: "Consolas", "Courier New", monospace;
@@ -92,6 +92,30 @@ Lucene.styles.leftLabel = [[
     margin-right: 1px;
 ]]
 
+Lucene.styles.mapControlButton = [[
+    background-color: rgba(0, 0, 0, .5);
+    border: 1px solid black;
+    border-radius: 5px;
+]]
+
+Lucene.styles.mobHeader = [[
+    background: transparent;
+    border-bottom: 1px solid #434343;
+]]
+
+Lucene.styles.mobItem = [[
+    QLabel {
+        background: transparent;
+        border-bottom: 1px solid #202020;
+        cursor: pointer;
+    }
+    QLabel:hover {
+        background: rgba(196, 255, 224, .3);
+    }
+]]
+
+-- #202020
+
 Lucene.styles.rightLabel = [[
     background-color: rgba(0, 0, 0, 0);
     font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
@@ -100,7 +124,7 @@ Lucene.styles.rightLabel = [[
 ]]
 
 Lucene.styles.transparent = [[
-    QLabel{
+    QLabel {
         background-color: rgba(0, 0, 0, 0);
     }
 ]]

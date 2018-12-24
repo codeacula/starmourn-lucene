@@ -13,3 +13,8 @@ Lucene.import("ui/containers")
 Lucene.import("ui/styles")
 Lucene.import("ui/sides/left")
 Lucene.import("ui/sides/right")
+
+-- Import the other things
+Lucene.import("ui/chat")
+Lucene.import("ui/maps")
+Lucene.import("ui/targeting")

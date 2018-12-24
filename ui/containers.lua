@@ -58,6 +58,16 @@ Lucene.containers.registerItem = function(name, item)
     return item
 end
 
+Lucene.containers.remove = function(name)
+
+    if not Lucene.containers.windows[name] then
+        return
+    end
+
+    Lucene.containers.windows[name]:hide()
+    Lucene.containers.windows[name] = nil
+end
+
 Lucene.containers.vbox = function(params, parent)
     if not Lucene.containers.checkName(params.name) then return end
 

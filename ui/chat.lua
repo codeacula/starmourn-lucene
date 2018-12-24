@@ -64,6 +64,22 @@ function Lucene.chats.showChat(name)
     Lucene.chats[name].label:setStyleSheet(Lucene.styles.chatActive)
 end
 
+function Lucene.chats.updateChat()
+    local text = ansi2decho(gmcp.Comm.Channel.Text.text)
+    for match, tabName in pairs(Lucene.settings.channels) do
+        if Lucene.chats[tabName] and gmcp.Comm.Channel.Text.channel:match(match) then
+            local timeStamp = getTime(true, "hh:mm:ss")
+            Lucene.chats[tabName].window:cecho("<white>"..timeStamp.." - ")
+            Lucene.chats[tabName].window:decho(text.."\n")
+
+            if tabName ~= Lucene.chats.activeChat.name then
+                Lucene.chats.flashChat(tabName)
+            end
+        end
+    end
+end
+registerAnonymousEventHandler("gmcp.Comm.Channel.Text", "Lucene.chats.updateChat")
+
 for _, tab in ipairs(Lucene.settings.tabs) do
     Lucene.chats.addChat(tab)
 
