@@ -19,7 +19,7 @@ Lucene.boot = function()
             border = {
                 top = 50,
                 bottom = 20,
-                left = 200,
+                left = 300,
                 right = 600
             },
             buttonHeight = 35,
@@ -31,6 +31,10 @@ Lucene.boot = function()
                 ["^clt%d+$"] = "Clans",
                 ft = "Faction",
                 dt = "Dynasty"
+            },
+            hunting = {
+                primary = "bot claw %s",
+                stun = "bot harass %s"
             },
             sides = {
                 top = true,
@@ -55,10 +59,13 @@ Lucene.boot = function()
     end
     
     -- Now let's import them files
+    Lucene.import("db/db")
     Lucene.import("utilities")
     Lucene.import("keypad")
 
     Lucene.import("room")
+    Lucene.import("targeting")
+    Lucene.import("hunter")
 
     Lucene.import("ui/ui")
 

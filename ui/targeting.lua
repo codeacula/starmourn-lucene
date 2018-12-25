@@ -4,6 +4,10 @@ Lucene.targetWindow.mobs = {}
 Lucene.targetWindow.space = {}
 Lucene.targetWindow.players = {}
 
+Lucene.targetWindow.variables = {
+    lineHeight = 15
+}
+
 Lucene.targetWindow.mobContainer = Lucene.containers.container({
     name = "mobContainer",
     x = "2%", y = "62%",
@@ -58,6 +62,32 @@ local mobNameHeader = Lucene.containers.label({
 mobNameHeader:echo(" Name")
 mobNameHeader:setStyleSheet(Lucene.styles.mobHeader)
 
+local mobNameHeader = Lucene.containers.label({
+    name = "mobHunterHeader",
+    x = "60%", y = 0,
+    height = px(15), width = "5%"
+}, Lucene.targetWindow.mobListContainer)
+mobNameHeader:echo("<center>+")
+mobNameHeader:setStyleSheet(Lucene.styles.mobHeader)
+
+local mobWeightNameHeader = Lucene.containers.label({
+    name = "mobWeightNameHeader",
+    x = "65%", y = 0,
+    height = px(15), width = "10%"
+}, Lucene.targetWindow.mobListContainer)
+mobWeightNameHeader:echo("<center>Name")
+mobWeightNameHeader:setStyleSheet(Lucene.styles.mobHeader)
+
+local mobWeightIndividualHeader = Lucene.containers.label({
+    name = "mobWeightIndividualHeader",
+    x = "75%", y = 0,
+    height = px(15), width = "10%"
+}, Lucene.targetWindow.mobListContainer)
+mobWeightIndividualHeader:echo("<center>Num")
+mobWeightIndividualHeader:setStyleSheet(Lucene.styles.mobHeader)
+
+
+
 function Lucene.targetWindow.updateMobList()
     local i = 1
 
@@ -71,14 +101,78 @@ function Lucene.targetWindow.updateMobList()
         if v then table.insert(mobTable, v) end
     end
 
-    for _, v in ipairs(Lucene.room.mobs) do
-        local mobLineItem = Lucene.containers.label({
+    table.sort(mobTable, function(a, b)
+        local aweight = 0
+        local bweight = 0
+
+        if not a.monster then aweight = aweight + 30 end
+        if not b.monster then bweight = bweight + 30 end
+
+        if a.ignore then aweight = aweight + 1000 end
+        if b.ignore then bweight = bweight + 1000 end
+
+        aweight = aweight + Lucene.hunter.getWeight(a)
+        bweight = bweight + Lucene.hunter.getWeight(b)
+
+        if aweight == 0 then aweight = 29 end
+        if bweight == 0 then bweight = 29 end
+
+        if aweight == bweight and a.name == b.name then
+            return a.id < b.id
+        end
+
+        if aweight == bweight then
+            return a.name < b.name
+        end
+
+        return aweight < bweight
+    end)
+
+    for _, v in ipairs(mobTable) do
+        local mobLineItem = Lucene.containers.container({
             name = "mobItem"..i,
-            x = 0, y = px(15 * i),
-            height = px(15), width = "60%"
+            x = 0, y = px(Lucene.targetWindow.variables.lineHeight * i),
+            height = px(Lucene.targetWindow.variables.lineHeight), width = "100%"
         }, Lucene.targetWindow.mobListContainer)
-        mobLineItem:echo(v.name)
-        mobLineItem:setStyleSheet(Lucene.styles.mobItem)
+
+        -- Mob Name
+        local mobNameItem = Lucene.containers.label({
+            name = "mobNameItem"..i,
+            x = 0, y = 0,
+            height = "100%", width = "60%"
+        }, mobLineItem)
+        mobNameItem:setStyleSheet(Lucene.styles.mobItem)
+
+        
+        if v.ignore then
+            mobNameItem:echo(v.name, "dim_grey")
+            mobNameItem:setDoubleClickCallback("Lucene.targeting.setTarget", v.id)
+        elseif Lucene.target and Lucene.target == v.id then
+            mobNameItem:echo(v.name, "LuceneDanger")
+            mobNameItem:setClickCallback("Lucene.targeting.setTarget", v.id)
+        elseif Lucene.hunter.isRegistered(v) then
+            mobNameItem:echo(v.name, "LuceneSuccess")
+            mobNameItem:setClickCallback("Lucene.targeting.setTarget", v.id)
+        else
+            mobNameItem:echo(v.name)
+            mobNameItem:setClickCallback("Lucene.targeting.setTarget", v.id)
+        end
+
+        -- Add To Hunter
+        local mobHunterItem = Lucene.containers.label({
+            name = "mobHunterItem"..i,
+            x = "60%", y = 0,
+            height = "100%", width = "5%"
+        }, mobLineItem)
+        mobHunterItem:setStyleSheet(Lucene.styles.mobItem)
+        
+        if Lucene.hunter.isRegistered(v) then
+            mobHunterItem:echo("<center>-", "LuceneDanger")
+            mobHunterItem:setClickCallback("Lucene.hunter.remove", v.name)
+        elseif Lucene.hunter.isHuntable(v) then
+            mobHunterItem:echo("<center>+", "LuceneSuccess")
+            mobHunterItem:setClickCallback("Lucene.hunter.add", v.name, 25)
+        end
 
         table.insert(Lucene.targetWindow.mobs, "mobItem"..i)
 
@@ -88,6 +182,8 @@ end
 registerAnonymousEventHandler("Lucene.mobAdded", "Lucene.targetWindow.updateMobList")
 registerAnonymousEventHandler("Lucene.mobsUpdated", "Lucene.targetWindow.updateMobList")
 registerAnonymousEventHandler("Lucene.mobRemoved", "Lucene.targetWindow.updateMobList")
+registerAnonymousEventHandler("Lucene.newTarget", "Lucene.targetWindow.updateMobList")
+registerAnonymousEventHandler("Lucene.hunterUpdated", "Lucene.targetWindow.updateMobList")
 
 -- Ships
 Lucene.targetWindow.shipButton = Lucene.containers.label({

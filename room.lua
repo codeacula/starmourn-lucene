@@ -52,15 +52,18 @@ function Lucene.room.processMob(gmcpData)
         id = tonumber(gmcpData.id) or 0,
         name = gmcpData.name or "",
         ignore = false,
-        monster = false
+        monster = false,
+        takeable = false
     }
 
     if gmcpData.attrib then
        local ignoreFind = string.find(gmcpData.attrib, "x") or -1
        local monsterFind = string.find(gmcpData.attrib, "m") or -1
+       local takeableFind = string.find(gmcpData.attrib, "t") or -1
 
         newMob.ignore = ignoreFind > -1
         newMob.monster = monsterFind > -1
+        newMob.takeable = takeableFind > -1
     end
 
     return newMob;
