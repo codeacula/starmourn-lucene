@@ -3,6 +3,8 @@ Lucene.targetWindow = {}
 Lucene.targetWindow.mobs = {}
 Lucene.targetWindow.space = {}
 Lucene.targetWindow.players = {}
+Lucene.targetWindow.shouldUpdate = true
+Lucene.targetWindow.updating = false
 
 Lucene.targetWindow.variables = {
     lineHeight = 15
@@ -86,6 +88,21 @@ local mobWeightNameHeader = Lucene.containers.label({
 mobWeightNameHeader:echo("<center>Hunt")
 mobWeightNameHeader:setStyleSheet(Lucene.styles.mobHeader)
 
+function Lucene.targetWindow.scheduleUpdate()
+    if Lucene.targetWindow.updating then
+        Lucene.targetWindow.shouldUpdate = true
+        return
+    end
+
+    Lucene.targetWindow.updating = true
+    tempTimer(.5, Lucene.targetWindow.updateMobList)
+end
+registerAnonymousEventHandler("Lucene.mobAdded", "Lucene.targetWindow.scheduleUpdate")
+registerAnonymousEventHandler("Lucene.mobsUpdated", "Lucene.targetWindow.scheduleUpdate")
+registerAnonymousEventHandler("Lucene.mobRemoved", "Lucene.targetWindow.scheduleUpdate")
+registerAnonymousEventHandler("Lucene.newTarget", "Lucene.targetWindow.scheduleUpdate")
+registerAnonymousEventHandler("Lucene.hunterUpdated", "Lucene.targetWindow.scheduleUpdate")
+
 function Lucene.targetWindow.updateMobList()
     local i = 1
     
@@ -146,7 +163,10 @@ function Lucene.targetWindow.updateMobList()
         mobNameItem:setDoubleClickCallback("")
 
         
-        if v.ignore == 1 then
+        if v.questable == 1 then
+            mobNameItem:echo(v.name, "LuceneWarn")
+            mobNameItem:setClickCallback("send", v.questCommand, true)
+        elseif v.ignore == 1 then
             mobNameItem:echo(v.name, "dim_grey")
             mobNameItem:setClickCallback("Lucene.room.greet", v.id)
             mobNameItem:setDoubleClickCallback("Lucene.targeting.setTarget", v.id)
@@ -156,9 +176,6 @@ function Lucene.targetWindow.updateMobList()
         elseif Lucene.hunter.isRegistered(v) then
             mobNameItem:echo(v.name, "LuceneSuccess")
             mobNameItem:setClickCallback("Lucene.targeting.setTarget", v.id)
-        elseif v.questable == 1 then
-            mobNameItem:echo(v.name, "LuceneWarn")
-            mobNameItem:setClickCallback("send", v.questCommand, true)
         else
             mobNameItem:echo(v.name)
             mobNameItem:setClickCallback("Lucene.targeting.setTarget", v.id)
@@ -220,12 +237,14 @@ function Lucene.targetWindow.updateMobList()
 
         i = i + 1
     end
+
+    Lucene.targetWindow.updating = false
+
+    if Lucene.targetWindow.shouldUpdate then
+        Lucene.targetWindow.shouldUpdate = false
+        Lucene.targetWindow.scheduleUpdate()
+    end
 end
-registerAnonymousEventHandler("Lucene.mobAdded", "Lucene.targetWindow.updateMobList")
-registerAnonymousEventHandler("Lucene.mobsUpdated", "Lucene.targetWindow.updateMobList")
-registerAnonymousEventHandler("Lucene.mobRemoved", "Lucene.targetWindow.updateMobList")
-registerAnonymousEventHandler("Lucene.newTarget", "Lucene.targetWindow.updateMobList")
-registerAnonymousEventHandler("Lucene.hunterUpdated", "Lucene.targetWindow.updateMobList")
 
 -- Ships
 Lucene.targetWindow.shipButton = Lucene.containers.label({

@@ -122,8 +122,16 @@ Lucene.say = function(text, color)
     cecho(("\n%s %s%s<reset>\n"):format(Lucene.sayPreamble, color, text))
 end
 
-Lucene.send = function(command)
-    send(command)
+Lucene.send = function(command, ...)
+    local commands = command:split("|")
+
+    for _, v in ipairs(commands) do
+        if v:find("%%") then
+            send(v:format(unpack(arg)))
+        else
+            send(v)
+        end
+    end
 end
 
 Lucene.shutDown = function()

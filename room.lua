@@ -1,15 +1,12 @@
 -- Handles all the players, mobs, etc in the room
 Lucene.room = {}
 Lucene.room.mobs = {}
-Lucene.room.suppressEvent = false
 
 function Lucene.room.addMob(incData)
     -- Process the mob
     local newMob = Lucene.room.processMob(incData)
 
     table.insert(Lucene.room.mobs, newMob)
-
-    if Lucene.room.suppressEvent then return end
 
     raiseEvent("Lucene.mobAdded", newMob)
 end
@@ -18,8 +15,6 @@ function Lucene.room.gmcpMobEntered()
     if gmcp.Char.Items.Add.location ~= "room" then
         return
     end
-
-    if Lucene.room.suppressEvent then return end
     
     Lucene.room.addMob(gmcp.Char.Items.Add.item)
 end
@@ -50,12 +45,10 @@ end
 function Lucene.room.processList(mobList)
     Lucene.room.mobs = {}
 
-    Lucene.room.suppressEvent = true
     for _, mob in pairs(mobList) do
         Lucene.room.addMob(mob)
     end
 
-    Lucene.room.suppressEvent = false
     raiseEvent("Lucene.mobsUpdated")
 end
 

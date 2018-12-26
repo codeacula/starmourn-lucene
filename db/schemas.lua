@@ -1,3 +1,14 @@
+AfflictionSchema = {
+    descrption = "",
+    duration = 0,
+    name = "",
+    stacking = 1,
+    subsysDamage = 0,
+    subsystem = "",
+    type = "",
+    _unique = { "name" }
+}
+
 ItemSchema = {
     block = 0, -- Do we not even show it in the mob list?
     id = 0,
