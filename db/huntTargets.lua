@@ -8,10 +8,24 @@ function Lucene.huntTargets:create(identifier, weight)
 
     local newTarget = self:new(id, name, weight)
     addedEntity, error = db:add(Lucene.db.huntTargets, newTarget)
-
+    
     if error then Lucene.error(debug.getinfo(1), error) end
 
-    return Lucene.items:getById(newItem.id)
+    return Lucene.huntTargets:findFirst(newTarget)
+end
+
+function Lucene.huntTargets:findFirst(huntTarget)
+    local res = db:fetch(Lucene.db.huntTargets, {
+        db:eq(Lucene.db.huntTargets.id, huntTarget.id),
+        db:eq(Lucene.db.huntTargets.name, huntTarget.name),
+    })
+
+    if not res or not res[1] then
+        Lucene.warning(("Unable to locate mob: <LuceneDanger>%s %s"):format(huntTarget.id, huntTarget.name))
+        return
+    end
+
+    return res[1]
 end
 
 function Lucene.huntTargets:getAll()
@@ -20,8 +34,8 @@ end
 
 function Lucene.huntTargets:new(id, name, weight)
     local huntTarget = {
-        id = id,
-        name = name,
+        id = id or 0,
+        name = name or "",
         weight = weight
     }
 

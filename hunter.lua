@@ -80,34 +80,24 @@ function Lucene.hunter.loadMobs()
     for _, huntTarget in ipairs(mobList) do
         local id = huntTarget.id
 
-        if not id then id = huntTarget.name end
+        if not id or id == 0 then id = huntTarget.name end
 
         Lucene.hunter.mobCache[id] = huntTarget
     end
 end
 
 function Lucene.hunter.remove(mob)
+    mob = tonumber(mob) or mob
 
-    local weight = 0
-    local locator = nil
+    local foundMob = Lucene.hunter.mobCache[mob]
 
-    if type(mob) == "string" then
-        mobname = mob
-        mob = { name = mobname }
-    elseif type(mob) == "number" then
-        mobname = mob
-        mob = { id = mobname }
-    end
-
-    if Lucene.hunter.mobCache[mob.id] then
-        Lucene.huntTargets:remove(Lucene.hunter.mobCache[mob.id])
-    elseif Lucene.hunter.mobCache[mob.name] then
-        Lucene.huntTargets:remove(Lucene.hunter.mobCache[mob.name])
-    else
+    if not foundMob then
+        Hunter.warning("Unable to locate mob: <LuceneDanger>"..mob)
         return
     end
 
-    Lucene.hunter.mobCache[locator] = nil
-    Lucene.say(("<LuceneWarn>Removed <red>%s <LuceneWarn>with weight <red>%s"):format(locator, weight))
+    Lucene.hunter.mobCache[mob] = nil
+    Lucene.huntTargets:remove(foundMob)
+    Lucene.say(("<LuceneWarn>Removed <red>%s <LuceneWarn>with weight <red>%s"):format(mob, foundMob.weight))
     raiseEvent("Lucene.hunterUpdated")
 end

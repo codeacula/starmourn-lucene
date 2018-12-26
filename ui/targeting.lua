@@ -167,7 +167,7 @@ function Lucene.targetWindow.updateMobList()
         if Lucene.hunter.isRegistered(v) then
             mobHunterItem:echo("<center>-", "LuceneDanger")
             mobHunterItem:setClickCallback("Lucene.hunter.remove", v.name)
-        elseif Lucene.hunter.isHuntable(v) then
+        elseif Lucene.hunter.isHuntable(v) == 1 then
             mobHunterItem:echo("<center>+", "LuceneSuccess")
             mobHunterItem:setClickCallback("Lucene.hunter.add", v.name, 25)
         end
