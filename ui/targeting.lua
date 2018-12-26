@@ -86,8 +86,6 @@ local mobWeightIndividualHeader = Lucene.containers.label({
 mobWeightIndividualHeader:echo("<center>Num")
 mobWeightIndividualHeader:setStyleSheet(Lucene.styles.mobHeader)
 
-
-
 function Lucene.targetWindow.updateMobList()
     local i = 1
 
@@ -144,7 +142,7 @@ function Lucene.targetWindow.updateMobList()
         mobNameItem:setStyleSheet(Lucene.styles.mobItem)
 
         
-        if v.ignore then
+        if v.ignore == 1 then
             mobNameItem:echo(v.name, "dim_grey")
             mobNameItem:setDoubleClickCallback("Lucene.targeting.setTarget", v.id)
         elseif Lucene.target and Lucene.target == v.id then

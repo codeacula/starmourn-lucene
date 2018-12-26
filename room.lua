@@ -2,11 +2,14 @@
 Lucene.room = {}
 Lucene.room.mobs = {}
 
-function Lucene.room.addMob(incData)
+function Lucene.room.addMob(incData, suppressEvent)
     -- Process the mob
     local newMob = Lucene.room.processMob(incData)
 
     table.insert(Lucene.room.mobs, newMob)
+
+    if suppressEvent then return end
+
     raiseEvent("Lucene.mobAdded", newMob)
 end
 
@@ -41,7 +44,7 @@ function Lucene.room.processList(mobList)
     Lucene.room.mobs = {}
 
     for _, mob in pairs(mobList) do
-        Lucene.room.addMob(mob)
+        Lucene.room.addMob(mob, true)
     end
     raiseEvent("Lucene.mobsUpdated")
 end
