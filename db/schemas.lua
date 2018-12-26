@@ -1,16 +1,23 @@
 ItemSchema = {
+    block = 0, -- Do we not even show it in the mob list?
     id = 0,
     name = "",
     gmcpData = "",
-    ignore = false,
-    monster = false,
-    takeable = false,
+    ignore = 0,
+    monster = 0,
+    takeable = 0,
     area = "",
-    huntable = false,
-    questable = false,
+    huntable = 0,
+    questable = 0,
     questCommand = "",
-    __index = { "id", "area" },
-    __unique = { "id" }
+    _index = { "area" },
+    _unique = { "id" }
+}
+
+HuntTargetSchema = {
+    id = 0,
+    name = "",
+    weight = 25
 }
 
 PlayerSchema = {
@@ -32,12 +39,12 @@ PlayerSchema = {
     age = 0,
     kills = 0,
     deaths = 0,
-    __index = { "name", "faction", "class" },
-    __unique = { "name" }
+    _index = { "faction", "class" },
+    _unique = { "name" }
 }
 
 RoomSchema = {
     num = 0,
-    explored = false,
-    __index = { "num" }
+    explored = 0,
+    _index = { "num" }
 }

@@ -1,17 +1,9 @@
 Lucene.import("db/schemas")
+Lucene.import("db/items")
 
-Lucene.db = {}
-Lucene.db.context = db:create("lucenedb",{
+Lucene.db = db:create("lucenedb", {
+    huntTargets = HuntTargetSchema,
     items = ItemSchema,
     players = PlayerSchema,
     rooms = RoomSchema
 })
-
--- Repos, basically
-Lucene.db.items = {}
-Lucene.db.players = {}
-Lucene.db.rooms = {}
-
-function Lucene.db.items.getById(id)
-
-end

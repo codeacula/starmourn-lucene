@@ -100,7 +100,7 @@ function Lucene.targetWindow.updateMobList()
     for _, v in ipairs(Lucene.room.mobs) do
         if v then table.insert(mobTable, v) end
     end
-
+    
     table.sort(mobTable, function(a, b)
         local aweight = 0
         local bweight = 0

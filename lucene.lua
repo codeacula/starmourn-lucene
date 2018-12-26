@@ -5,7 +5,9 @@ if Lucene then return end
 
 raiseEvent("Lucene.loading")
 
-Lucene = {}
+Lucene = {
+    debugging = true
+}
 
 -- Properties
 Lucene.homeDirectory = getMudletHomeDir().."/lucene" -- Some basic utility stuff
@@ -77,6 +79,18 @@ Lucene.danger = function(text)
     Lucene.say(text, "<LuceneDanger>")
 end
 
+Lucene.debug = function(message)
+    if not Lucene.debugging then return end
+    message = message or ""
+    Lucene.warn(("%s: %s <File: %s, Line: %s>"):format(getTime(true), message, debug.getinfo(2).source, debug.getinfo(2).currentline))
+end
+
+Lucene.error = function(debugInfo, text)
+    display(debugInfo)
+
+    Lucene.danger(text)
+end
+
 Lucene.getPath = function(pathFrag)
     return ("%s/%s"):format(Lucene.homeDirectory, pathFrag)
 end
@@ -123,8 +137,3 @@ Lucene.warn = function(text)
 end
 
 Lucene.boot()
-
-gmod.registerUser("lucene")
-gmod.enableModule("lucene", "Comm.Channel")
-gmod.enableModule("lucene", "IRE.CombatMessage")
-sendGMCP("Core.Supports.Add [ \"Comm.Channel 1\", \"IRE.CombatMessage 1\" ]")
