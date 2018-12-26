@@ -1,7 +1,21 @@
 Lucene.items = {}
 
+function Lucene.items:addQuest(num, command)
+    local item = self:getById(num)
+
+    if not item then
+        Lucene.warn("Unable to locate <LuceneDanger>"..num)
+        return
+    end
+
+    item.questable = 1
+    item.questCommand = command
+    self:update(item)
+    Lucene.success(("Registered <LuceneWarn>%s <LuceneSuccess>with command <LuceneWarn>%s"):format(num, command))
+end
+
 function Lucene.items:checkVal(item, gmcpData)
-    if gmcpData.attrib then
+    if gmcpData and gmcpData.attrib then
         if string.find(gmcpData.attrib, "x") then item.ignore = 1 else item.ignore = 0 end
         if string.find(gmcpData.attrib, "m") then item.monster = 1 else item.monster = 0 end
         if string.find(gmcpData.attrib, "t") then item.takeable = 1 else item.takeable = 0 end
@@ -9,7 +23,6 @@ function Lucene.items:checkVal(item, gmcpData)
 
     if gmcp.Room and gmcp.Room.Info.area then
         item.roomnum = tonumber(gmcp.Room.Info.num)
-        item.areanum = tonumber(gmcp.Room.Info.coords:split(",")[1])
     end
 
     item.huntable = Lucene.hunter.isHuntable(item)
@@ -65,8 +78,25 @@ function Lucene.items:new(gmcpData)
     return newItem
 end
 
+function Lucene.items:removeQuest(num)
+    local item = self:getById(num)
+
+    if not item then
+        Lucene.warn("Unable to locate <LuceneDanger>"..num)
+        return
+    end
+
+    item.questable = 0
+    item.questCommand = ""
+    self:update(item)
+    Lucene.success(("Removed quest command from <LuceneWarn>%s"):format(num))
+end
+
 function Lucene.items:update(item, gmcpData)
-    item = self:checkVal(item, gmcpData)
+
+    if(gmcpData) then
+        item = self:checkVal(item, gmcpData)
+    end
 
     tempTimer(0, function()
         local res, error = db:update(Lucene.db.items, item)

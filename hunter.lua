@@ -29,12 +29,13 @@ function Lucene.hunter.adjustWeight(identifier, weight)
     local mob = Lucene.hunter.mobCache[identifier]
 
     if not mob then
-        Lucene.danger("Unable to locate mob: <green>"..identifier)
+        Lucene.hunter.add(identifier, weight)
         return
     end
 
     mob.weight = weight
     Lucene.huntTargets:update(mob)
+    raiseEvent("Lucene.hunterUpdated")
 end
 
 function Lucene.hunter.getWeight(mob)

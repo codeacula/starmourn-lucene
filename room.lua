@@ -1,14 +1,15 @@
 -- Handles all the players, mobs, etc in the room
 Lucene.room = {}
 Lucene.room.mobs = {}
+Lucene.room.suppressEvent = false
 
-function Lucene.room.addMob(incData, suppressEvent)
+function Lucene.room.addMob(incData)
     -- Process the mob
     local newMob = Lucene.room.processMob(incData)
 
     table.insert(Lucene.room.mobs, newMob)
 
-    if suppressEvent then return end
+    if Lucene.room.suppressEvent then return end
 
     raiseEvent("Lucene.mobAdded", newMob)
 end
@@ -17,6 +18,8 @@ function Lucene.room.gmcpMobEntered()
     if gmcp.Char.Items.Add.location ~= "room" then
         return
     end
+
+    if Lucene.room.suppressEvent then return end
     
     Lucene.room.addMob(gmcp.Char.Items.Add.item)
 end
@@ -40,12 +43,19 @@ function Lucene.room.gmcpMobRemoved()
 end
 registerAnonymousEventHandler("gmcp.Char.Items.Remove", "Lucene.room.gmcpMobRemoved")
 
+function Lucene.room.greet(what)
+    send("greet "..what)
+end
+
 function Lucene.room.processList(mobList)
     Lucene.room.mobs = {}
 
+    Lucene.room.suppressEvent = true
     for _, mob in pairs(mobList) do
-        Lucene.room.addMob(mob, true)
+        Lucene.room.addMob(mob)
     end
+
+    Lucene.room.suppressEvent = false
     raiseEvent("Lucene.mobsUpdated")
 end
 
@@ -53,6 +63,10 @@ function Lucene.room.processMob(gmcpData)
     local newMob = Lucene.items:fetchItem(gmcpData)
 
     return newMob;
+end
+
+function Lucene.room.probe(what)
+    send("probe "..what)
 end
 
 function Lucene.room.removeMob(itemNumber)

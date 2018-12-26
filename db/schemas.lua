@@ -5,7 +5,6 @@ ItemSchema = {
     ignore = 0,
     monster = 0,
     takeable = 0,
-    areanum = 0,
     huntable = 0,
     questable = 0,
     questCommand = "",
@@ -44,6 +43,7 @@ PlayerSchema = {
 }
 
 RoomSchema = {
+    areanum = 0,
     num = 0,
     explored = 0,
     _index = { "num" }
