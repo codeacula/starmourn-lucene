@@ -8,7 +8,8 @@ function Lucene.items:checkVal(item, gmcpData)
     end
 
     if gmcp.Room and gmcp.Room.Info.area then
-        item.area = gmcp.Room.Info.area
+        item.roomnum = tonumber(gmcp.Room.Info.num)
+        item.areanum = tonumber(gmcp.Room.Info.coords:split(",")[1])
     end
 
     item.huntable = Lucene.hunter.isHuntable(item)

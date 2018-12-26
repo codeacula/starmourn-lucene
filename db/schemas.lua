@@ -2,14 +2,14 @@ ItemSchema = {
     block = 0, -- Do we not even show it in the mob list?
     id = 0,
     name = "",
-    gmcpData = "",
     ignore = 0,
     monster = 0,
     takeable = 0,
-    area = "",
+    areanum = 0,
     huntable = 0,
     questable = 0,
     questCommand = "",
+    roomnum = 0,
     _index = { "area" },
     _unique = { "id" }
 }

@@ -88,7 +88,7 @@ mobWeightIndividualHeader:setStyleSheet(Lucene.styles.mobHeader)
 
 function Lucene.targetWindow.updateMobList()
     local i = 1
-
+    
     for _, v in ipairs(Lucene.targetWindow.mobs) do
         Lucene.containers.remove(v)
     end
@@ -103,11 +103,11 @@ function Lucene.targetWindow.updateMobList()
         local aweight = 0
         local bweight = 0
 
-        if not a.monster then aweight = aweight + 30 end
-        if not b.monster then bweight = bweight + 30 end
+        if a.monster == 0 then aweight = aweight + 30 end
+        if b.monster == 0 then bweight = bweight + 30 end
 
-        if a.ignore then aweight = aweight + 1000 end
-        if b.ignore then bweight = bweight + 1000 end
+        if a.ignore == 1 then aweight = aweight + 1000 end
+        if b.ignore == 1 then bweight = bweight + 1000 end
 
         aweight = aweight + Lucene.hunter.getWeight(a)
         bweight = bweight + Lucene.hunter.getWeight(b)

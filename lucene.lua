@@ -66,6 +66,7 @@ Lucene.boot = function()
     Lucene.import("keypad")
 
     Lucene.import("room")
+    Lucene.import("mapper")
     Lucene.import("targeting")
     Lucene.import("hunter")
 
