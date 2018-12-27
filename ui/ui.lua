@@ -17,4 +17,4 @@ Lucene.import("ui/sides/right")
 -- Import the other things
 Lucene.import("ui/chat")
 Lucene.import("ui/maps")
-Lucene.import("ui/targeting")
+Lucene.import("ui/targetWindow/targetWindow")

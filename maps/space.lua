@@ -45,8 +45,10 @@ Lucene.maps.space.row1 = Lucene.containers.hbox({
     width = "100%", height = "33%"
 }, Lucene.maps.space.firstButtonRow)
 
-Lucene.maps.space.shipProbe = createButton("shipProbeButton", "Probe (P)", "", Lucene.maps.space.row1)
-Lucene.maps.space.shipCone = createButton("shipCone", "Cone (C)", "", Lucene.maps.space.row1)
+Lucene.maps.space.shipBeaconButton = createButton("shipBeaconButton", "Beacon (B)", "", Lucene.maps.space.row1)
+Lucene.maps.space.shipBeaconButton:setClickCallback("send", "SHIP BEACON", true)
+Lucene.maps.space.shipConeButton = createButton("shipConeButton", "Cone (C)", "", Lucene.maps.space.row1)
+Lucene.maps.space.shipConeButton:setClickCallback("send", "SHIP CONE", true)
 
 Lucene.maps.space.mapContainer:hide()
 

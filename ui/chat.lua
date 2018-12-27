@@ -21,9 +21,10 @@ function Lucene.chats.addChat(name)
         height = "98%", width = "100%"
     }, Lucene.ui.sides.right.chatFooter)
 
-    newWindow:setFontSize(10)
+    newWindow:setFontSize(9)
     newWindow:enableAutoWrap()
     newWindow:setColor(0, 0, 0, 150)
+    newWindow:setFont("Consolas")
 
     newWindow:hide()
 
@@ -38,7 +39,7 @@ function Lucene.chats.createLabel(name)
         fgColor = "#ffffff"
     }, Lucene.ui.sides.right.chatHeader)
 
-    newLabel:echo("<center>"..name, nil, "10")
+    newLabel:echo("<center>"..name, nil, "9")
 
     newLabel:setStyleSheet(Lucene.styles.chatNormal)
 

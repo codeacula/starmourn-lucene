@@ -22,7 +22,7 @@ Lucene.maps.addTab = function(name)
         fgColor = "#ffffff"
     }, Lucene.ui.sides.right.mapHeader)
 
-    newLabel:echo("<center>"..name, nil, "10")
+    newLabel:echo("<center>"..name, nil, "9")
 
     newLabel:setStyleSheet(Lucene.styles.chatNormal)
 

@@ -8,53 +8,53 @@ Lucene.styles.buttonActive = [[
     background-color: #00654b;
     border-left: 1px solid rgba(0,0,0,0.7);
     border-bottom: 1px solid rgba(0,0,0,0.7);
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.buttonInactive = [[
     background-color: rgba(242,99,73,0.29);
     border-left: 1px solid rgba(0,0,0,0.7);
     border-bottom: 1px solid rgba(0,0,0,0.7);
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.buttonNormal = [[
     background-color: rgba(51,51,51,0.4);
     border-left: 1px solid rgba(0,0,0,0.7);
     border-bottom: 1px solid rgba(0,0,0,0.7);
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.chatActive = [[
     background-color: rgba(69, 158, 255, .5);
     border-left: 1px solid black;
     border-bottom: 2px solid rgb(69, 158, 255);
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.chatAlert = [[
     background-color: rgba(226, 103, 255, .5);
     border-left: 1px solid black;
     border-bottom: 2px solid #f25118;
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.chatFooter = [[
     background-color: rgba(0, 0, 0, .5);
     border-bottom: 2px solid #FFFFFF;
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.chatNormal = [[
     background-color: rgba(0, 0, 0, .5);
     border-left: 1px solid black;
     border-bottom: 2px solid #FFFFFF;
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.gaugeFront = [[
     border-radius: 5px;
-    font-family: "Consolas", "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.healthBack = [[
@@ -67,7 +67,7 @@ Lucene.styles.infoBox = [[
     QLabel {
         background-color: rgba(0, 0, 0, .7);
         border: 1px solid rgba(0, 0, 0, .8);
-        font-family: "Consolas", "Courier New", monospace;
+        font-family: Consolas, "Courier New", Terminal, monospace;
         font-size: 14px;
     }
 ]]
@@ -76,19 +76,19 @@ Lucene.styles.infoBoxFooter = [[
     background-color: transparent;
     border-bottom: 1px solid white;
     border-right: 1px solid white;
-    font-family: "Consolas", "Courier New", monospace;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.infoBoxHeader = [[
     background-color: transparent;
     border-right: 1px solid white;
-    font-family: "Consolas", "Courier New", monospace;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
 Lucene.styles.leftLabel = [[
     background-color: rgba(0, 0, 0, 0);
     border-right: 1px solid #FFFFFF;
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
     margin-right: 1px;
 ]]
 
@@ -98,16 +98,17 @@ Lucene.styles.mapControlButton = [[
     border-radius: 5px;
 ]]
 
-Lucene.styles.mobHeader = [[
+Lucene.styles.listLineHeader = [[
     background: transparent;
     border-bottom: 1px solid #434343;
+    font-family: Consolas, "Courier New", Terminal, monospace;
 ]]
 
-Lucene.styles.mobItem = [[
+Lucene.styles.listLineItem = [[
     QLabel {
         background: transparent;
         border-bottom: 1px solid #202020;
-        cursor: pointer;
+        font-family: Consolas, "Courier New", Terminal, monospace;
     }
     QLabel:hover {
         background: rgba(196, 255, 224, .3);
@@ -118,7 +119,7 @@ Lucene.styles.mobItem = [[
 
 Lucene.styles.rightLabel = [[
     background-color: rgba(0, 0, 0, 0);
-    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: Consolas, "Courier New", Terminal, monospace;
     background-position: top right;
     background-image: url("]] .. Lucene.getPath("background.jpg") .. [[")
 ]]

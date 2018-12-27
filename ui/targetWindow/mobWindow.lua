@@ -1,41 +1,5 @@
--- The targeting window
-Lucene.targetWindow = {}
 Lucene.targetWindow.mobs = {}
-Lucene.targetWindow.space = {}
-Lucene.targetWindow.players = {}
-Lucene.targetWindow.shouldUpdate = true
-Lucene.targetWindow.updating = false
 
-Lucene.targetWindow.variables = {
-    lineHeight = 15
-}
-
-Lucene.targetWindow.mobContainer = Lucene.containers.container({
-    name = "mobContainer",
-    x = "2%", y = "62%",
-    width = "94%", height = "37%"
-}, Lucene.ui.sides.left.container)
-
-Lucene.targetWindow.mobLabel = Lucene.containers.label({
-    name = "mobLabel",
-    x = px(0), y = px(0),
-    width = "100%", height = 
-    "100%"
-}, Lucene.targetWindow.mobContainer)
-Lucene.targetWindow.mobLabel:setStyleSheet([[
-    background: rgba(0, 0, 0, .5);
-    border: 1px solid black;
-    border-radius: 10px;
-]])
-
--- Button row. Mob, Ship, Player
-Lucene.targetWindow.headerBox = Lucene.containers.hbox({
-    name = "targetHeaderBox",
-    x = 0, y = 0,
-    height = "10%", width = "100%"
-}, Lucene.targetWindow.mobContainer)
-
--- Mobs
 Lucene.targetWindow.mobButton = Lucene.containers.label({
     name = "mobTargetsButton"
 }, Lucene.targetWindow.headerBox)
@@ -49,12 +13,13 @@ Lucene.targetWindow.mobButton:setStyleSheet([[
         background: rgba(24, 204, 138, .6);
     }
 ]])
+Lucene.targetWindow.mobButton:setClickCallback("Lucene.targetWindow.setActiveWindow", "mobs")
 
 Lucene.targetWindow.mobListContainer = Lucene.containers.container({
     name = "mobListContainer",
     x = 0, y = "10%",
     height = "90%", width = "100%"
-}, Lucene.targetWindow.mobContainer)
+}, Lucene.targetWindow.listContainer)
 
 local mobNameHeader = Lucene.containers.label({
     name = "mobNameHeader",
@@ -62,7 +27,7 @@ local mobNameHeader = Lucene.containers.label({
     height = px(15), width = "80%"
 }, Lucene.targetWindow.mobListContainer)
 mobNameHeader:echo(" Name")
-mobNameHeader:setStyleSheet(Lucene.styles.mobHeader)
+mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
 local mobProbeHeader = Lucene.containers.label({
     name = "mobProbeHeader",
@@ -70,7 +35,7 @@ local mobProbeHeader = Lucene.containers.label({
     height = px(15), width = "5%"
 }, Lucene.targetWindow.mobListContainer)
 mobProbeHeader:echo("<center>P")
-mobProbeHeader:setStyleSheet(Lucene.styles.mobHeader)
+mobProbeHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
 local mobNameHeader = Lucene.containers.label({
     name = "mobHunterHeader",
@@ -78,7 +43,7 @@ local mobNameHeader = Lucene.containers.label({
     height = px(15), width = "5%"
 }, Lucene.targetWindow.mobListContainer)
 mobNameHeader:echo("<center>+")
-mobNameHeader:setStyleSheet(Lucene.styles.mobHeader)
+mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
 local mobWeightNameHeader = Lucene.containers.label({
     name = "mobWeightNameHeader",
@@ -86,22 +51,7 @@ local mobWeightNameHeader = Lucene.containers.label({
     height = px(15), width = "10%"
 }, Lucene.targetWindow.mobListContainer)
 mobWeightNameHeader:echo("<center>Hunt")
-mobWeightNameHeader:setStyleSheet(Lucene.styles.mobHeader)
-
-function Lucene.targetWindow.scheduleUpdate()
-    if Lucene.targetWindow.updating then
-        Lucene.targetWindow.shouldUpdate = true
-        return
-    end
-
-    Lucene.targetWindow.updating = true
-    tempTimer(.5, Lucene.targetWindow.updateMobList)
-end
-registerAnonymousEventHandler("Lucene.mobAdded", "Lucene.targetWindow.scheduleUpdate")
-registerAnonymousEventHandler("Lucene.mobsUpdated", "Lucene.targetWindow.scheduleUpdate")
-registerAnonymousEventHandler("Lucene.mobRemoved", "Lucene.targetWindow.scheduleUpdate")
-registerAnonymousEventHandler("Lucene.newTarget", "Lucene.targetWindow.scheduleUpdate")
-registerAnonymousEventHandler("Lucene.hunterUpdated", "Lucene.targetWindow.scheduleUpdate")
+mobWeightNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
 function Lucene.targetWindow.updateMobList()
     local i = 1
@@ -158,7 +108,7 @@ function Lucene.targetWindow.updateMobList()
             x = 0, y = 0,
             height = "100%", width = "80%"
         }, mobLineItem)
-        mobNameItem:setStyleSheet(Lucene.styles.mobItem)
+        mobNameItem:setStyleSheet(Lucene.styles.listLineItem)
         mobNameItem:setClickCallback("")
         mobNameItem:setDoubleClickCallback("")
 
@@ -186,7 +136,7 @@ function Lucene.targetWindow.updateMobList()
             x = "80%", y = 0,
             height = "100%", width = "5%"
         }, mobLineItem)
-        mobProbe:setStyleSheet(Lucene.styles.mobItem)
+        mobProbe:setStyleSheet(Lucene.styles.listLineItem)
         mobProbe:setClickCallback("Lucene.room.probe", v.id)
         mobProbe:echo("<center>P")
 
@@ -196,7 +146,7 @@ function Lucene.targetWindow.updateMobList()
             x = "85%", y = 0,
             height = "100%", width = "5%"
         }, mobLineItem)
-        mobHunterItem:setStyleSheet(Lucene.styles.mobItem)
+        mobHunterItem:setStyleSheet(Lucene.styles.listLineItem)
         
         if Lucene.hunter.isRegistered(v) then
             mobHunterItem:echo("<center>-", "LuceneDanger")
@@ -212,7 +162,7 @@ function Lucene.targetWindow.updateMobList()
             x = "90%", y = 0,
             height = "100%", width = "5%"
         }, mobLineItem)
-        mobHunterDemoteName:setStyleSheet(Lucene.styles.mobItem)
+        mobHunterDemoteName:setStyleSheet(Lucene.styles.listLineItem)
         mobHunterDemoteName:setClickCallback("")
 
         if Lucene.hunter.isHuntable(v) == 1 and weight ~= Lucene.hunter.maxWeight then
@@ -225,7 +175,7 @@ function Lucene.targetWindow.updateMobList()
             x = "95%", y = 0,
             height = "100%", width = "5%"
         }, mobLineItem)
-        mobHunterPromoteName:setStyleSheet(Lucene.styles.mobItem)
+        mobHunterPromoteName:setStyleSheet(Lucene.styles.listLineItem)
         mobHunterPromoteName:setClickCallback("")
 
         if Lucene.hunter.isHuntable(v) == 1 and weight > 1 then
@@ -245,32 +195,3 @@ function Lucene.targetWindow.updateMobList()
         Lucene.targetWindow.scheduleUpdate()
     end
 end
-
--- Ships
-Lucene.targetWindow.shipButton = Lucene.containers.label({
-    name = "mobShipButton"
-}, Lucene.targetWindow.headerBox)
-Lucene.targetWindow.shipButton:echo("<center>S")
-Lucene.targetWindow.shipButton:setStyleSheet([[
-    QLabel {
-        background: rgba(213, 56, 255, .4);
-    }
-    QLabel:hover {
-        background: rgba(213, 56, 255, .6);
-    }
-]])
-
--- Players
-Lucene.targetWindow.playerButton = Lucene.containers.label({
-    name = "mobPlayerButton"
-}, Lucene.targetWindow.headerBox)
-Lucene.targetWindow.playerButton:echo("<center>P")
-Lucene.targetWindow.playerButton:setStyleSheet([[
-    QLabel {
-        background: rgba(255, 204, 81, .4);
-        border-top-right-radius: 10px;
-    }
-    QLabel:hover {
-        background: rgba(255, 204, 81, .6);
-    }
-]])

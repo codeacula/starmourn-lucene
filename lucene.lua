@@ -63,14 +63,14 @@ Lucene.boot = function()
     -- Now let's import them files
     Lucene.import("db/db")
     Lucene.import("utilities")
+    Lucene.import("hunter")
     Lucene.import("keypad")
-
     Lucene.import("mapper")
     Lucene.import("player")
     Lucene.import("players")
     Lucene.import("room")
+    Lucene.import("spaceship")
     Lucene.import("targeting")
-    Lucene.import("hunter")
 
     Lucene.import("ui/ui")
 

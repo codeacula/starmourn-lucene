@@ -16,6 +16,7 @@ Lucene.player.stats = {
     muscular = 0,
     pt = 0,
     sensory = 0,
+    stim = 0,
     wetwiring = 0,
     ww = 1,
     xp = 0
@@ -40,6 +41,12 @@ end
 function Lucene.player:enqueue(command)
     -- At the queue to the queue table
     table.insert(self.commandQueue, commad)
+end
+
+function Lucene.player:giveBalance(balanceName)
+    self.stats[balanceName] = 1
+
+    raiseEvent("Lucene."..balanceName..".give")
 end
 
 function Lucene.player:haveCommandBal()
@@ -79,6 +86,12 @@ end
 
 function Lucene.player:startBalanceTimer()
     self.timeoutHandle = tempTimer(self.timeoutPeriod, function() Lucene.player:resetBalance() end)
+end
+
+function Lucene.player:takeBalance(balanceName)
+    self.stats[balanceName] = 0
+
+    raiseEvent("Lucene."..balanceName..".take")
 end
 
 function Lucene.player.updateGmcp()
