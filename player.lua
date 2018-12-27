@@ -96,7 +96,6 @@ end
 
 function Lucene.player.updateGmcp()
     local vits = gmcp.Char.Vitals
-    
     Lucene.player:setBalance(vits.bal)
     Lucene.player.stats.class = vits.class or Lucene.player.stats.class
     Lucene.player.stats.em = tonumber(vits.em) or Lucene.player.stats.em

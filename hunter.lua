@@ -64,7 +64,8 @@ function Lucene.hunter.attack(startAttacking)
     end
     
     if 
-        not Lucene.player:haveCommandBal()
+        not Lucene.hunter.hunting
+        or not Lucene.player:haveCommandBal()
         or not (Lucene.hunter.attacking or Lucene.hunter.autoAttack)
         or not Lucene.target then
             return
@@ -239,6 +240,7 @@ function Lucene.hunter.toggleAutoAttack(flag)
 
     if Lucene.hunter.autoAttack then
         Lucene.success("Auto-hunting enabled.")
+        Lucene.hunter.attack()
     else
         Lucene.danger("Auto-hunting disabled.")
     end
