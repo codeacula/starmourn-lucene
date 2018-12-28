@@ -87,11 +87,11 @@ function Lucene.hunter:getWeight(mob)
     if not mob then return 0 end
 
     if mob:id() and self.mobCache[mob:id()] then
-        return self.mobCache[mob:id()].weight
+        return self.mobCache[mob:id()]:weight()
     end
 
     if mob:name() and self.mobCache[mob:name()] then
-        return self.mobCache[mob:name()].weight
+        return self.mobCache[mob:name()]:weight()
     end
 
     if mob:questable() then

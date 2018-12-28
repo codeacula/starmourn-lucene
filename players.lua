@@ -13,6 +13,7 @@ function Lucene.players.finishDownload(_, fileLocation)
     end
 
     local jsonString = fileHandle:read("*a")
+    fileHandle:close()
     os.remove(fileLocation)
 
     local data = yajl.to_value(jsonString)

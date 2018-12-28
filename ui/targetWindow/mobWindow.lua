@@ -25,7 +25,7 @@ local mobNameHeader = Lucene.containers.label({
     x = 0, y = 0,
     height = px(15), width = "80%"
 }, Lucene.targetWindow.mobListContainer)
-mobNameHeader:echo(" Name")
+mobNameHeader:echo("Name")
 mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
 local mobProbeHeader = Lucene.containers.label({
@@ -65,14 +65,9 @@ function Lucene.targetWindow:updateMobList()
     
     Lucene.targetWindow.cleanupMobWindow()
 
-    local mobTable = {}
+    table.sort(Lucene.room.mobs)
+
     for _, v in ipairs(Lucene.room.mobs) do
-        if v then table.insert(mobTable, v) end
-    end
-
-    table.sort(mobTable)
-
-    for _, v in ipairs(mobTable) do
         local weight = v:weight()
 
         local mobLineItem = Lucene.containers.container({
