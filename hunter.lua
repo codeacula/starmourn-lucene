@@ -30,30 +30,30 @@ function Lucene.hunter:add(identifier, weight)
     raiseEvent("Lucene.hunterUpdated")
 end
 
-function Lucene.hunter.activate(flag)
-    if flag == Lucene.hunter.hunting then
+function Lucene.hunter:activate(flag)
+    if flag == self.hunting then
         return
     end
 
     if flag == nil then
-        flag = not Lucene.hunter.hunting
+        flag = not self.hunting
     end
 
-    Lucene.hunter.hunting = flag
+    self.hunting = flag
 
     if flag then
         Lucene.success("Beginning the hunt.")
-        Lucene.hunter.mobList()
+        self.mobList()
     else
         Lucene.danger("The hunt has ended.")
     end
 end
 
 function Lucene.hunter:adjustWeight(identifier, weight)
-    local mob = Lucene.hunter.mobCache[identifier]
+    local mob = self.mobCache[identifier]
 
     if not mob then
-        Lucene.hunter:add(identifier, weight)
+        self:add(identifier, weight)
         return
     end
 

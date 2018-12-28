@@ -37,7 +37,7 @@ function Lucene.items:createItem(gmcpData)
 
     if error then Lucene.error(debug.getinfo(1), error) end
 
-    return self:getById(newItem.id)
+    return self:getById(newItem:id())
 end
 
 function Lucene.items:getById(id)
@@ -102,7 +102,7 @@ function Lucene.items:update(item, gmcpData)
         item = self:checkVal(item, gmcpData)
     end
 
-    tempTimer(0, function()
+    tempTimer(0.5, function()
         local res, error = db:update(Lucene.db.items, item.context)
         if error then Lucene.error(debug.getinfo(1), error) end
     end)
