@@ -1,5 +1,3 @@
-
-
 AfflictionSchema = {
     descrption = "",
     duration = 0,

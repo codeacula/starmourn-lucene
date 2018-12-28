@@ -2,11 +2,11 @@
 Lucene.room = {}
 Lucene.room.mobs = {}
 
-function Lucene.room.addMob(incData)
+function Lucene.room:addMob(incData)
     -- Process the mob
-    local newMob = Lucene.room.processMob(incData)
+    local newMob = self:processMob(incData)
 
-    table.insert(Lucene.room.mobs, newMob)
+    table.insert(self.mobs, newMob)
 
     raiseEvent("Lucene.mobAdded", newMob)
 end
@@ -16,7 +16,7 @@ function Lucene.room.gmcpMobEntered()
         return
     end
     
-    Lucene.room.addMob(gmcp.Char.Items.Add.item)
+    Lucene.room:addMob(gmcp.Char.Items.Add.item)
 end
 registerAnonymousEventHandler("gmcp.Char.Items.Add", "Lucene.room.gmcpMobEntered")
 
@@ -25,7 +25,7 @@ function Lucene.room.gmcpMobList()
         return
     end
     
-    Lucene.room.processList(gmcp.Char.Items.List.items)
+    Lucene.room:processList(gmcp.Char.Items.List.items)
 end
 registerAnonymousEventHandler("gmcp.Char.Items.List", "Lucene.room.gmcpMobList")
 
@@ -34,46 +34,38 @@ function Lucene.room.gmcpMobRemoved()
         return
     end
     
-    Lucene.room.removeMob(tonumber(gmcp.Char.Items.Remove.item.id))
+    Lucene.room:removeMob(tonumber(gmcp.Char.Items.Remove.item.id))
 end
 registerAnonymousEventHandler("gmcp.Char.Items.Remove", "Lucene.room.gmcpMobRemoved")
 
-function Lucene.room.greet(what)
-    send("greet "..what)
-end
-
-function Lucene.room.processList(mobList)
-    Lucene.room.mobs = {}
+function Lucene.room:processList(mobList)
+    self.mobs = {}
 
     for _, mob in pairs(mobList) do
-        Lucene.room.addMob(mob)
+        self:addMob(mob)
     end
 
     raiseEvent("Lucene.mobsUpdated")
 end
 
-function Lucene.room.processMob(gmcpData)
+function Lucene.room:processMob(gmcpData)
     local newMob = Lucene.items:fetchItem(gmcpData)
 
     return newMob;
 end
 
-function Lucene.room.probe(what)
-    send("probe "..what)
-end
-
-function Lucene.room.removeMob(itemNumber)
+function Lucene.room:removeMob(itemNumber)
     itemNumber = tonumber(itemNumber)
 
     if not itemNumber then return end
 
-    i = #Lucene.room.mobs
+    i = #self.mobs
 
     while i ~= 0 do
-        local mobInfo = Lucene.room.mobs[i]
+        local mobInfo = self.mobs[i]
 
         if mobInfo.id == itemNumber then
-            table.remove(Lucene.room.mobs, i)
+            table.remove(self.mobs, i)
             raiseEvent("Lucene.mobRemoved", mobInfo)
         end
 

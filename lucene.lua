@@ -34,6 +34,12 @@ Lucene.boot = function()
                 ft = "Faction",
                 dt = "Dynasty"
             },
+            factionColors = {
+                celestine = "#AEFFBC",
+                none = "#FFFCB1",
+                scatterhome = "#CCA377",
+                song = "#DBC8FF"
+            },
             hunting = {
                 primary = "bot claw %s",
                 stun = "bot harass %s"
@@ -52,14 +58,30 @@ Lucene.boot = function()
                 "Clans",
                 "Dynasty"
             },
-            topButtonwidth = 200
+            topButtonwidth = 200,
+            weights = {
+                block = 9999,
+                float = 29,
+                enemy = -9999,
+                ignore = 1000,
+                monster = 30
+            }
         }
     
         Lucene.saveSettings()
     else
         Lucene.getSettings()
     end
-    
+        
+    -- Objects
+    Lucene.objects = {}
+    Lucene.import("objects/affliction")
+    Lucene.import("objects/huntTarget")
+    Lucene.import("objects/item")
+    Lucene.import("objects/player")
+    Lucene.import("objects/room")
+    Lucene.import("objects/spaceItem")
+
     -- Now let's import them files
     Lucene.import("db/db")
     Lucene.import("utilities")
@@ -141,6 +163,10 @@ end
 
 Lucene.success = function(text)
     Lucene.say(text, "<LuceneSuccess>")
+end
+
+Lucene.tracepath = function()
+    display(debug.traceback())
 end
 
 Lucene.warn = function(text)

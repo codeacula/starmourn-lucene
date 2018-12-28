@@ -34,6 +34,9 @@ Lucene.targetWindow.headerBox = Lucene.containers.hbox({
 }, Lucene.targetWindow.listContainer)
 
 function Lucene.targetWindow.setActiveWindow(name)
+    Lucene.targetWindow:cleanupMobWindow()
+    Lucene.targetWindow:cleanupShipWindow()
+
     if name == "mobs" then
         Lucene.targetWindow.mobListContainer:show()
         Lucene.targetWindow.shipListContainer:hide()
@@ -72,6 +75,7 @@ registerAnonymousEventHandler("Lucene.newTarget", "Lucene.targetWindow.scheduleU
 registerAnonymousEventHandler("Lucene.hunterUpdated", "Lucene.targetWindow.scheduleUpdate")
 registerAnonymousEventHandler("Lucene.shipsUpdated", "Lucene.targetWindow.scheduleUpdate")
 
+Lucene.import("ui/targetWindow/importantTargets")
 Lucene.import("ui/targetWindow/mobWindow")
 Lucene.import("ui/targetWindow/shipWindow")
 Lucene.import("ui/targetWindow/playerWindow")

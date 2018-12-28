@@ -7,7 +7,7 @@ function Lucene.huntTargets:create(identifier, weight)
     if not id then name = identifier end
 
     local newTarget = self:new(id, name, weight)
-    addedEntity, error = db:add(Lucene.db.huntTargets, newTarget)
+    addedEntity, error = db:add(Lucene.db.huntTargets, newTarget.context)
     
     if error then Lucene.error(debug.getinfo(1), error) end
 
@@ -15,38 +15,47 @@ function Lucene.huntTargets:create(identifier, weight)
 end
 
 function Lucene.huntTargets:findFirst(huntTarget)
-    local res = db:fetch(Lucene.db.huntTargets, {
-        db:eq(Lucene.db.huntTargets.id, huntTarget.id),
-        db:eq(Lucene.db.huntTargets.name, huntTarget.name),
-    })
+    local res = db:fetch(Lucene.db.huntTargets, db:eq(huntTarget:dbFind()))
 
     if not res or not res[1] then
         Lucene.warning(("Unable to locate mob: <LuceneDanger>%s %s"):format(huntTarget.id, huntTarget.name))
         return
     end
 
-    return res[1]
+    huntTarget.context = res[1]
+
+    return huntTarget
 end
 
 function Lucene.huntTargets:getAll()
-    return db:fetch(Lucene.db.huntTargets)
+    local res = db:fetch(Lucene.db.huntTargets)
+
+    local hts = {}
+
+    for _, v in ipairs(res) do
+        table.insert(hts, Lucene.objects.huntTarget:new(v))
+    end
+
+    return hts
 end
 
 function Lucene.huntTargets:new(id, name, weight)
-    local huntTarget = {
+    local huntTargetDto = {
         id = id or 0,
         name = name or "",
         weight = weight
     }
 
+    local huntTarget = Lucene.objects.huntTarget:new(huntTargetDto)
+
     return huntTarget
 end
 
 function Lucene.huntTargets:remove(huntTarget)
-    db:delete(Lucene.db.huntTargets, huntTarget)
+    db:delete(Lucene.db.huntTargets, huntTarget.context)
 end
 
 function Lucene.huntTargets:update(huntTarget)
-    local res, error = db:update(Lucene.db.huntTargets, huntTarget)
+    local res, error = db:update(Lucene.db.huntTargets, huntTarget.context)
     if error then Lucene.error(debug.getinfo(1), error) end
 end

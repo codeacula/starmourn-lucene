@@ -40,15 +40,19 @@ local shipIdHeader = Lucene.containers.label({
 shipIdHeader:echo("ID")
 shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
 
-function Lucene.targetWindow.updateNearbyShips()
-    i = 1
-
+function Lucene.targetWindow:cleanupShipWindow()
     for _, item in ipairs(shipLineTable) do
         Lucene.containers.remove(item)
     end
 
     shipLineTable = {}
+end
 
+function Lucene.targetWindow.updateNearbyShips()
+    i = 1
+
+    Lucene.targetWindow.cleanupShipWindow()
+    
     for _, ship in ipairs(Lucene.spaceship.nearby) do
         local nearbyShipLine = Lucene.containers.container({
             name = "nearbyShipLine"..i,
