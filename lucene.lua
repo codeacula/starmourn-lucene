@@ -34,12 +34,6 @@ Lucene.boot = function()
                 ft = "Faction",
                 dt = "Dynasty"
             },
-            factionColors = {
-                celestine = "#AEFFBC",
-                none = "#FFFCB1",
-                scatterhome = "#CCA377",
-                song = "#DBC8FF"
-            },
             hunting = {
                 primary = "bot claw %s",
                 stun = "bot harass %s"
