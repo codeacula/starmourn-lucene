@@ -43,7 +43,7 @@ function Lucene.players:finishCheck()
 end
 
 function Lucene.players.finishDownload(_, fileLocation)
-    if not fileLocation:find("(%a+)%.json") then return end
+    if not fileLocation:find("(%a+)%.json") or fileLocation:find("all_online") then return end
 
     local fileHandle, error = io.open(fileLocation, "r")
 
@@ -102,6 +102,39 @@ function Lucene.players.loadNames()
     end
 end
 registerAnonymousEventHandler("Lucene.bootstrap", "Lucene.players.loadNames")
+
+function Lucene.players.processCharacterList(_, fileLocation)
+    if not fileLocation:find("all_online") then return end
+
+    local fileHandle, error = io.open(fileLocation, "r")
+
+    if not fileHandle then
+        Lucene.debug(error)
+        return
+    end
+
+    local jsonString = fileHandle:read("*a")
+    fileHandle:close()
+    os.remove(fileLocation)
+
+    local data = yajl.to_value(jsonString)
+    
+    for _, group in ipairs(data.characters) do
+        
+        downloadFile(
+            Lucene.getPath(("temp/%s.json"):format(group.name)),
+            ("https://www.starmourn.com/api/characters/%s.json"):format(group.name)
+        )
+    end
+end
+registerAnonymousEventHandler("sysDownloadDone", "Lucene.players.processCharacterList")
+
+function Lucene.players:processOnline()
+    downloadFile(
+        Lucene.getPath(("temp/all_online.json"):format(lowerName)),
+        ("https://www.starmourn.com/api/characters.json"):format(lowerName)
+    )
+end
 
 function Lucene.players:save(player)
     Lucene.players.playerCache[player:name()] = player

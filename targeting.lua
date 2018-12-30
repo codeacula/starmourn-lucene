@@ -11,9 +11,10 @@ function Lucene.targeting:setTarget(name)
         Lucene.warn(("Target switched. New target: <LuceneDanger>%s"):format(name))
         raiseEvent("Lucene.newTarget")
     elseif oldTar and not name then
-        send("st")
+        send("st none")
         Lucene.target = nil
         Lucene.warn("Target cleared.")
+        raiseEvent("Lucene.newTarget")
         return
     end
 end

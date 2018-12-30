@@ -4,41 +4,45 @@ local shipLineTable = {}
 local idwidth = "10%"
 local nameWidth = "50%"
 
-Lucene.targetWindow.shipButton = Lucene.containers.label({
-    name = "shipButton"
-}, Lucene.targetWindow.headerBox)
-Lucene.targetWindow.shipButton:echo("<center>S")
-Lucene.targetWindow.shipButton:setStyleSheet([[
-    QLabel {
-        background: rgba(213, 56, 255, .4);
-    }
-    QLabel:hover {
-        background: rgba(213, 56, 255, .6);
-    }
-]])
-Lucene.targetWindow.shipButton:setClickCallback("Lucene.targetWindow.setActiveWindow", "ships")
-
-Lucene.targetWindow.shipListContainer = Lucene.containers.container({
-    name = "shipListContainer",
-    x = 0, y = "10%",
-    height = "90%", width = "100%"
-}, Lucene.targetWindow.listContainer)
-
-local shipTitleHeader = Lucene.containers.label({
-    name = "shipTitleHeader",
-    x = 0, y = 0,
-    height = px(Lucene.targetWindow.variables.lineHeight), width = nameWidth
-}, Lucene.targetWindow.shipListContainer)
-shipTitleHeader:echo("Object")
-shipTitleHeader:setStyleSheet(Lucene.styles.listLineHeader)
-
-local shipIdHeader = Lucene.containers.label({
-    name = "shipIdHeader",
-    x = nameWidth, y = 0,
-    height = px(Lucene.targetWindow.variables.lineHeight), width = idwidth
-}, Lucene.targetWindow.shipListContainer)
-shipIdHeader:echo("ID")
-shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
+function Lucene.targetWindow:buildShipWindow()
+    self.shipButton = Lucene.containers.label({
+        name = "shipButton"
+    }, self.headerBox)
+    self.shipButton:echo("<center>S")
+    self.shipButton:setStyleSheet([[
+        QLabel {
+            background: rgba(213, 56, 255, .4);
+        }
+        QLabel:hover {
+            background: rgba(213, 56, 255, .6);
+        }
+    ]])
+    self.shipButton:setClickCallback([[function()
+        Lucene.targetWindow:setActiveWindow("ships") 
+    end]])
+    
+    self.shipListContainer = Lucene.containers.container({
+        name = "shipListContainer",
+        x = 0, y = "10%",
+        height = "90%", width = "100%"
+    }, self.listContainer)
+    
+    local shipTitleHeader = Lucene.containers.label({
+        name = "shipTitleHeader",
+        x = 0, y = 0,
+        height = px(self.variables.lineHeight), width = nameWidth
+    }, self.shipListContainer)
+    shipTitleHeader:echo("Object")
+    shipTitleHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    
+    local shipIdHeader = Lucene.containers.label({
+        name = "shipIdHeader",
+        x = nameWidth, y = 0,
+        height = px(self.variables.lineHeight), width = idwidth
+    }, self.shipListContainer)
+    shipIdHeader:echo("ID")
+    shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
+end
 
 function Lucene.targetWindow:cleanupShipWindow()
     for _, item in ipairs(shipLineTable) do
@@ -48,17 +52,17 @@ function Lucene.targetWindow:cleanupShipWindow()
     shipLineTable = {}
 end
 
-function Lucene.targetWindow.updateNearbyShips()
+function Lucene.targetWindow:updateNearbyShips()
     i = 1
 
-    Lucene.targetWindow.cleanupShipWindow()
+    self.cleanupShipWindow()
     
     for _, ship in ipairs(Lucene.spaceship.nearby) do
         local nearbyShipLine = Lucene.containers.container({
             name = "nearbyShipLine"..i,
-            x = 0, y = px(Lucene.targetWindow.variables.lineHeight * i),
-            height = px(Lucene.targetWindow.variables.lineHeight), width = "100%"
-        }, Lucene.targetWindow.shipListContainer)
+            x = 0, y = px(self.variables.lineHeight * i),
+            height = px(self.variables.lineHeight), width = "100%"
+        }, self.shipListContainer)
 
         -- Ship Name
         local nearbyShipName = Lucene.containers.label({
@@ -91,10 +95,10 @@ function Lucene.targetWindow.updateNearbyShips()
         table.insert(shipLineTable, nearbyShipLine)
     end
 
-    Lucene.targetWindow.updating = false
+    self.updating = false
 
-    if Lucene.targetWindow.shouldUpdate then
-        Lucene.targetWindow.shouldUpdate = false
-        Lucene.targetWindow.scheduleUpdate()
+    if self.shouldUpdate then
+        self.shouldUpdate = false
+        self:scheduleUpdate()
     end
 end
