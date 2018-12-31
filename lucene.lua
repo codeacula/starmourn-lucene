@@ -76,6 +76,7 @@ Lucene.boot = function()
     Lucene.import("objects/player")
     Lucene.import("objects/room")
     Lucene.import("objects/spaceItem")
+    Lucene.import("objects/targetWindow")
 
     -- Now let's import them files
     Lucene.import("db/db")

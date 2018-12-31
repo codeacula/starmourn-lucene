@@ -1,10 +1,10 @@
 local mobWindow = Lucene.objects.targetWindow:new()
 mobWindow.mobs = {}
 
-function mobWindow:addTab()
+function mobWindow:build()
     self.tabButton = Lucene.containers.label({
         name = "mobTargetsButton"
-    }, self.headerBox)
+    }, Lucene.targetWindow.headerBox)
     self.tabButton:echo("<center>M")
     self.tabButton:setStyleSheet([[
         QLabel {
@@ -14,22 +14,17 @@ function mobWindow:addTab()
             background: rgba(24, 204, 138, .6);
         }
     ]])
-    self.tabButton:setClickCallback([[function()
-        Lucene.targetWindow:setActiveWindow(self.subWindows["mob"]) 
-    end]])
-end
 
-function mobWindow:build()
     self.container = Lucene.containers.container({
         name = "mobListContainer",
         x = 0, y = "10%",
         height = "90%", width = "100%"
-    }, self.listContainer)
+    }, Lucene.targetWindow.listContainer)
     
     self.mobNameHeader = Lucene.containers.label({
         name = "mobNameHeader",
         x = 0, y = 0,
-        height = px(15), width = "80%"
+        height = Lucene.targetWindow.variables.lineHeight, width = "80%"
     }, self.container)
     self.mobNameHeader:echo("Name")
     self.mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
@@ -37,7 +32,7 @@ function mobWindow:build()
     self.mobProbeHeader = Lucene.containers.label({
         name = "mobProbeHeader",
         x = "80%", y = 0,
-        height = px(15), width = "5%"
+        height = Lucene.targetWindow.variables.lineHeight, width = "5%"
     }, self.container)
     self.mobProbeHeader:echo("<center>P")
     self.mobProbeHeader:setStyleSheet(Lucene.styles.listLineHeader)
@@ -45,7 +40,7 @@ function mobWindow:build()
     self.mobHunterAdd = Lucene.containers.label({
         name = "mobHunterAdd",
         x = "85%", y = 0,
-        height = px(15), width = "5%"
+        height = Lucene.targetWindow.variables.lineHeight, width = "5%"
     }, self.container)
     self.mobHunterAdd:echo("<center>+")
     self.mobHunterAdd:setStyleSheet(Lucene.styles.listLineHeader)
@@ -53,10 +48,12 @@ function mobWindow:build()
     self.mobWeightNameHeader = Lucene.containers.label({
         name = "mobWeightNameHeader",
         x = "90%", y = 0,
-        height = px(15), width = "10%"
+        height = Lucene.targetWindow.variables.lineHeight, width = "10%"
     }, self.container)
     self.mobWeightNameHeader:echo("<center>Hunt")
     self.mobWeightNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    
+    self.tabButton:setClickCallback("Lucene.targetWindow.headerCallback", self.tabIndex)
 end
 
 function mobWindow:cleanupMobWindow()
@@ -67,10 +64,18 @@ function mobWindow:cleanupMobWindow()
     self.mobs = {}
 end
 
+function mobWindow:hide()
+    self.container:hide()
+end
+
 function mobWindow:reset()
     for i = 1, 100 do
         hideWindow("mobItem"..i)
     end
+end
+
+function mobWindow:show()
+    self.container:show()
 end
 
 function mobWindow:update()
@@ -85,9 +90,9 @@ function mobWindow:update()
 
         local mobLineItem = Lucene.containers.container({
             name = "mobItem"..i,
-            x = 0, y = px(self.variables.lineHeight * i),
-            height = px(self.variables.lineHeight), width = "100%"
-        }, self.subWindows["mob"])
+            x = 0, y = px(Lucene.targetWindow.variables.lineHeight * i),
+            height = px(Lucene.targetWindow.variables.lineHeight), width = "100%"
+        }, self.container)
 
         -- Mob Name
         local mobNameItem = Lucene.containers.label({
@@ -175,4 +180,4 @@ function mobWindow:update()
     end
 end
 
-Lucene.targetWindow.subWindows["mob"] = mobWindow
+Lucene.targetWindow:registerWindow(mobWindow)

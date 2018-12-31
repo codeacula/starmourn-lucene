@@ -1,6 +1,5 @@
 -- The targeting window
 Lucene.targetWindow = {}
-Lucene.targetWindow.activeWindow = "mobs"
 Lucene.targetWindow.currentContainer = nil
 Lucene.targetWindow.shouldUpdate = true
 Lucene.targetWindow.subWindows = {}
@@ -37,13 +36,13 @@ function Lucene.targetWindow:buildUi()
         height = "10%", width = "100%"
     }, self.listContainer)
 
-    -- Build the windows
-    self:buildImportantWindow()
-    self:buildMobWindow()
-    self:buildShipWindow()
-    self:buildPlayerWindow()
+    -- Go through the current windows and build them
+    for _, window in pairs(self.subWindows) do
+        window:build()
+        window:hide()
+    end
 
-    self:setActiveWindow(self.subWindows["mob"])
+    self:setActiveWindow(self.subWindows[1])
 end
 
 function Lucene.targetWindow:clean()
@@ -51,9 +50,16 @@ function Lucene.targetWindow:clean()
     self:scrubMobs()
 end
 
+function Lucene.targetWindow.headerCallback(index)
+    Lucene.targetWindow:setActiveWindow(Lucene.targetWindow.subWindows[index])
+end
+
+function Lucene.targetWindow:registerWindow(window)
+    table.insert(self.subWindows, window)
+    window.tabIndex = #self.subWindows
+end
+
 function Lucene.targetWindow:setActiveWindow(windowHandle)
-    self:cleanupMobWindow()
-    self:cleanupShipWindow()
 
     if Lucene.targetWindow.currentContainer then
         Lucene.targetWindow.currentContainer:hide()
@@ -61,8 +67,6 @@ function Lucene.targetWindow:setActiveWindow(windowHandle)
 
     Lucene.targetWindow.currentContainer = windowHandle
     Lucene.targetWindow.currentContainer:show()
-
-    self.activeWindow = name
     self:scheduleUpdate()
 end
 

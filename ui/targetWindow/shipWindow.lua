@@ -1,4 +1,3 @@
-
 local shipWindow = Lucene.objects.targetWindow:new()
 shipWindow.lines ={}
 
@@ -8,7 +7,7 @@ local nameWidth = "50%"
 function shipWindow:build()
     self.shipButton = Lucene.containers.label({
         name = "shipButton"
-    }, self.headerBox)
+    }, Lucene.targetWindow.headerBox)
     self.shipButton:echo("<center>S")
     self.shipButton:setStyleSheet([[
         QLabel {
@@ -18,20 +17,18 @@ function shipWindow:build()
             background: rgba(213, 56, 255, .6);
         }
     ]])
-    self.shipButton:setClickCallback([[function()
-        Lucene.targetWindow:setActiveWindow(Lucene.targetWindow.subWindows["ships"]) 
-    end]])
+    self.shipButton:setClickCallback("Lucene.targetWindow.headerCallback", self.tabIndex)
     
     self.shipListContainer = Lucene.containers.container({
         name = "shipListContainer",
         x = 0, y = "10%",
         height = "90%", width = "100%"
-    }, self.listContainer)
+    }, Lucene.targetWindow.listContainer)
     
     self.shipTitleHeader = Lucene.containers.label({
         name = "shipTitleHeader",
         x = 0, y = 0,
-        height = px(self.variables.lineHeight), width = nameWidth
+        height = px(Lucene.targetWindow.variables.lineHeight), width = nameWidth
     }, self.shipListContainer)
     self.shipTitleHeader:echo("Object")
     self.shipTitleHeader:setStyleSheet(Lucene.styles.listLineHeader)
@@ -39,30 +36,38 @@ function shipWindow:build()
     self.shipIdHeader = Lucene.containers.label({
         name = "shipIdHeader",
         x = nameWidth, y = 0,
-        height = px(self.variables.lineHeight), width = idwidth
+        height = px(Lucene.targetWindow.variables.lineHeight), width = idwidth
     }, self.shipListContainer)
     self.shipIdHeader:echo("ID")
     self.shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
 end
 
-function Lucene.targetWindow:cleanupShipWindow()
-    for _, item in ipairs(shipLineTable) do
+function shipWindow:cleanupShipWindow()
+    for _, item in ipairs(self.lines) do
         Lucene.containers.remove(item)
     end
 
-    shipLineTable = {}
+    self.lines = {}
 end
 
-function Lucene.targetWindow:updateNearbyShips()
+function shipWindow:hide()
+    self.shipListContainer:hide()
+end
+
+function shipWindow:show()
+    self.shipListContainer:show()
+end
+
+function shipWindow:update()
     i = 1
 
-    self.cleanupShipWindow()
+    self:cleanupShipWindow()
     
     for _, ship in ipairs(Lucene.spaceship.nearby) do
         local nearbyShipLine = Lucene.containers.container({
             name = "nearbyShipLine"..i,
-            x = 0, y = px(self.variables.lineHeight * i),
-            height = px(self.variables.lineHeight), width = "100%"
+            x = 0, y = px(Lucene.targetWindow.variables.lineHeight * i),
+            height = px(Lucene.targetWindow.variables.lineHeight), width = "100%"
         }, self.shipListContainer)
 
         -- Ship Name
@@ -93,15 +98,8 @@ function Lucene.targetWindow:updateNearbyShips()
 
         i = i + 1
 
-        table.insert(shipLineTable, nearbyShipLine)
-    end
-
-    self.updating = false
-
-    if self.shouldUpdate then
-        self.shouldUpdate = false
-        self:scheduleUpdate()
+        table.insert(self.lines, nearbyShipLine)
     end
 end
 
-Lucene.targetWindow.subWindows["ships"] = shipWindow
+Lucene.targetWindow:registerWindow(shipWindow)

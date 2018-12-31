@@ -6,11 +6,11 @@ local TargetWindow = {
 
 TargetWindow.__index = TargetWindow
 
-function TargetWindow:addTab()
+function TargetWindow:build()
 
 end
 
-function TargetWindow:build()
+function TargetWindow:hide()
 
 end
 
@@ -24,6 +24,10 @@ function TargetWindow:new(name)
 end
 
 function TargetWindow:reset()
+
+end
+
+function TargetWindow:show()
 
 end
 
