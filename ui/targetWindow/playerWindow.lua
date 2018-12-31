@@ -15,7 +15,7 @@ function Lucene.targetWindow:buildPlayerWindow()
     ]])
     
     self.playerButton:setClickCallback([[function()
-        Lucene.targetWindow:setActiveWindow("player") 
+        Lucene.targetWindow:setActiveWindow("players") 
     end]])
     
     self.playerListContainer = Lucene.containers.container({
@@ -23,4 +23,8 @@ function Lucene.targetWindow:buildPlayerWindow()
         x = 0, y = "10%",
         height = "90%", width = "100%"
     }, self.listContainer)
+end
+
+function Lucene.targetWindow:updatePlayerWindow()
+
 end

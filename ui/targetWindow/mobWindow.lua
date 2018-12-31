@@ -1,11 +1,12 @@
-Lucene.targetWindow.mobs = {}
+local mobWindow = Lucene.objects.targetWindow:new()
+mobWindow.mobs = {}
 
-function Lucene.targetWindow:buildMobWindow()
-    self.mobButton = Lucene.containers.label({
+function mobWindow:addTab()
+    self.tabButton = Lucene.containers.label({
         name = "mobTargetsButton"
     }, self.headerBox)
-    self.mobButton:echo("<center>M")
-    self.mobButton:setStyleSheet([[
+    self.tabButton:echo("<center>M")
+    self.tabButton:setStyleSheet([[
         QLabel {
             background: rgba(24, 204, 138, .4);
         }
@@ -13,50 +14,52 @@ function Lucene.targetWindow:buildMobWindow()
             background: rgba(24, 204, 138, .6);
         }
     ]])
-    self.mobButton:setClickCallback([[function()
-        Lucene.targetWindow:setActiveWindow("mobs") 
+    self.tabButton:setClickCallback([[function()
+        Lucene.targetWindow:setActiveWindow(self.subWindows["mob"]) 
     end]])
-    
-    self.mobListContainer = Lucene.containers.container({
+end
+
+function mobWindow:build()
+    self.container = Lucene.containers.container({
         name = "mobListContainer",
         x = 0, y = "10%",
         height = "90%", width = "100%"
     }, self.listContainer)
     
-    local mobNameHeader = Lucene.containers.label({
+    self.mobNameHeader = Lucene.containers.label({
         name = "mobNameHeader",
         x = 0, y = 0,
         height = px(15), width = "80%"
-    }, self.mobListContainer)
-    mobNameHeader:echo("Name")
-    mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    }, self.container)
+    self.mobNameHeader:echo("Name")
+    self.mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
     
-    local mobProbeHeader = Lucene.containers.label({
+    self.mobProbeHeader = Lucene.containers.label({
         name = "mobProbeHeader",
         x = "80%", y = 0,
         height = px(15), width = "5%"
-    }, self.mobListContainer)
-    mobProbeHeader:echo("<center>P")
-    mobProbeHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    }, self.container)
+    self.mobProbeHeader:echo("<center>P")
+    self.mobProbeHeader:setStyleSheet(Lucene.styles.listLineHeader)
     
-    local mobNameHeader = Lucene.containers.label({
-        name = "mobHunterHeader",
+    self.mobHunterAdd = Lucene.containers.label({
+        name = "mobHunterAdd",
         x = "85%", y = 0,
         height = px(15), width = "5%"
-    }, self.mobListContainer)
-    mobNameHeader:echo("<center>+")
-    mobNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    }, self.container)
+    self.mobHunterAdd:echo("<center>+")
+    self.mobHunterAdd:setStyleSheet(Lucene.styles.listLineHeader)
     
-    local mobWeightNameHeader = Lucene.containers.label({
+    self.mobWeightNameHeader = Lucene.containers.label({
         name = "mobWeightNameHeader",
         x = "90%", y = 0,
         height = px(15), width = "10%"
-    }, self.mobListContainer)
-    mobWeightNameHeader:echo("<center>Hunt")
-    mobWeightNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    }, self.container)
+    self.mobWeightNameHeader:echo("<center>Hunt")
+    self.mobWeightNameHeader:setStyleSheet(Lucene.styles.listLineHeader)
 end
 
-function Lucene.targetWindow:cleanupMobWindow()
+function mobWindow:cleanupMobWindow()
     for _, v in ipairs(self.mobs) do
         Lucene.containers.remove(v)
     end
@@ -64,14 +67,13 @@ function Lucene.targetWindow:cleanupMobWindow()
     self.mobs = {}
 end
 
-function Lucene.targetWindow:scrubMobs()
+function mobWindow:reset()
     for i = 1, 100 do
         hideWindow("mobItem"..i)
-        echo(i)
     end
 end
 
-function Lucene.targetWindow:updateMobList()
+function mobWindow:update()
     local i = 1
     
     self:cleanupMobWindow()
@@ -85,7 +87,7 @@ function Lucene.targetWindow:updateMobList()
             name = "mobItem"..i,
             x = 0, y = px(self.variables.lineHeight * i),
             height = px(self.variables.lineHeight), width = "100%"
-        }, self.mobListContainer)
+        }, self.subWindows["mob"])
 
         -- Mob Name
         local mobNameItem = Lucene.containers.label({
@@ -171,11 +173,6 @@ function Lucene.targetWindow:updateMobList()
 
         i = i + 1
     end
-
-    self.updating = false
-
-    if self.shouldUpdate then
-        self.shouldUpdate = false
-        self:scheduleUpdate()
-    end
 end
+
+Lucene.targetWindow.subWindows["mob"] = mobWindow

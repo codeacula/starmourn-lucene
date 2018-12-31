@@ -82,6 +82,8 @@ function Lucene.hunter:attack(startAttacking)
     Lucene.player:send(self.attackCommand, Lucene.target)
     return
 end
+Lucene.callbacks.register("Lucene.prompt", function() Lucene.hunter:attack() end)
+Lucene.callbacks.register("Lucene.balance.given", function() Lucene.hunter:attack() end)
 
 function Lucene.hunter:getWeight(mob)
     if not mob then return 0 end
@@ -118,10 +120,10 @@ function Lucene.hunter:isRegistered(mob)
     return false
 end
 
-function Lucene.hunter.init()
-    Lucene.hunter:loadMobs()
+function Lucene.hunter:init()
+    self:loadMobs()
 end
-registerAnonymousEventHandler("Lucene.bootstrap", "Lucene.hunter.init")
+Lucene.callbacks.register("Lucene.bootstrap", function() Lucene.hunter:init() end)
 
 function Lucene.hunter:loadMobs()
     local mobList = Lucene.huntTargets:getAll()
@@ -131,52 +133,46 @@ function Lucene.hunter:loadMobs()
     end
 end
 
-function Lucene.hunter.mobAdd(mobInfo)
-    if not Lucene.hunter.hunting or not Lucene.hunter:isRegistered(mobInfo) then return end
+function Lucene.hunter:mobAdd(mobInfo)
+    if not self.hunting or not self:isRegistered(mobInfo) then return end
 
-    table.insert(Lucene.hunter.attackList, mobInfo)
-    table.sort(Lucene.hunter.attackList)
+    table.insert(self.attackList, mobInfo)
+    table.sort(self.attackList)
 end
-registerAnonymousEventHandler("Lucene.mobAdded", "Lucene.hunter.mobAdd")
+Lucene.callbacks.register("Lucene.mobAdded", function() Lucene.hunter:mobAdd() end)
 
-function Lucene.hunter.mobLeft(mobInfo)
-    if not Lucene.hunter.hunting then return end
+function Lucene.hunter:mobLeft(mobInfo)
+    if not self.hunting then return end
 
-    for i = #Lucene.hunter.attackList, 1, -1 do
-        local mob = Lucene.hunter.attackList[i]
+    for i = #self.attackList, 1, -1 do
+        local mob = self.attackList[i]
 
         if mob.id == mobInfo.id then
-            table.remove(Lucene.hunter.attackList, i)
+            table.remove(self.attackList, i)
         end
     end
-    table.sort(Lucene.hunter.attackList)
+    table.sort(self.attackList)
 
     if mobInfo.id == Lucene.target then
-        Lucene.hunter:switchTarget()
+        self:switchTarget()
     end
 end
-registerAnonymousEventHandler("Lucene.mobRemoved", "Lucene.hunter.mobLeft")
+Lucene.callbacks.register("Lucene.mobRemoved", function() Lucene.hunter:mobLeft() end)
 
-function Lucene.hunter.mobList()
-    if not Lucene.hunter.hunting then return end
+function Lucene.hunter:mobList()
+    if not self.hunting then return end
 
-    Lucene.hunter.attackList = {}
+    self.attackList = {}
 
     for _, mobInfo in ipairs(Lucene.room.mobs) do
-        if Lucene.hunter:isRegistered(mobInfo) then
-            table.insert(Lucene.hunter.attackList, mobInfo)
+        if self:isRegistered(mobInfo) then
+            table.insert(self.attackList, mobInfo)
         end
     end
-    table.sort(Lucene.hunter.attackList)
-    Lucene.hunter:switchTarget()
+    table.sort(self.attackList)
+    self:switchTarget()
 end
-registerAnonymousEventHandler("Lucene.mobsUpdated", "Lucene.hunter.mobList")
-
-function Lucene.hunter.onPrompt()
-    Lucene.hunter:attack()
-end
-registerAnonymousEventHandler("Lucene.prompt", "Lucene.hunter.onPrompt")
-registerAnonymousEventHandler("Lucene.balance.given", "Lucene.hunter.onPrompt")
+Lucene.callbacks.register("Lucene.mobsUpdated", function() Lucene.hunter:mobList() end)
 
 function Lucene.hunter:remove(mob)
     mob = tonumber(mob) or mob

@@ -56,10 +56,10 @@ function Lucene.maps.space.docking()
     Lucene.say("We have left space.")
     Lucene.maps.showMap()
 end
-registerAnonymousEventHandler("Lucene.docked", "Lucene.maps.space.docking")
+Lucene.callbacks.register("Lucene.docked", Lucene.maps.space.docking)
 
 function Lucene.maps.space.switchToSpace()
     Lucene.say("Entering space.")
     Lucene.maps.showSpace()
 end
-registerAnonymousEventHandler("Lucene.enteredSpace", "Lucene.maps.space.switchToSpace")
+Lucene.callbacks.register("Lucene.enteredSpace", Lucene.maps.space.switchToSpace)

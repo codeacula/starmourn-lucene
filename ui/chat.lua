@@ -79,7 +79,7 @@ function Lucene.chats.updateChat()
         end
     end
 end
-registerAnonymousEventHandler("gmcp.Comm.Channel.Text", "Lucene.chats.updateChat")
+Lucene.callbacks.register("gmcp.Comm.Channel.Text", Lucene.chats.updateChat)
 
 for _, tab in ipairs(Lucene.settings.tabs) do
     Lucene.chats.addChat(tab)

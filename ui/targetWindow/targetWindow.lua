@@ -1,7 +1,9 @@
 -- The targeting window
 Lucene.targetWindow = {}
 Lucene.targetWindow.activeWindow = "mobs"
+Lucene.targetWindow.currentContainer = nil
 Lucene.targetWindow.shouldUpdate = true
+Lucene.targetWindow.subWindows = {}
 Lucene.targetWindow.updating = false
 
 Lucene.targetWindow.variables = {
@@ -41,7 +43,7 @@ function Lucene.targetWindow:buildUi()
     self:buildShipWindow()
     self:buildPlayerWindow()
 
-    self:setActiveWindow("mobs")
+    self:setActiveWindow(self.subWindows["mob"])
 end
 
 function Lucene.targetWindow:clean()
@@ -49,23 +51,16 @@ function Lucene.targetWindow:clean()
     self:scrubMobs()
 end
 
-function Lucene.targetWindow:setActiveWindow(name)
+function Lucene.targetWindow:setActiveWindow(windowHandle)
     self:cleanupMobWindow()
     self:cleanupShipWindow()
 
-    if name == "mobs" then
-        self.mobListContainer:show()
-        self.shipListContainer:hide()
-        self.playerListContainer:hide()
-    elseif name == "ships" then
-        self.mobListContainer:hide()
-        self.shipListContainer:show()
-        self.playerListContainer:hide()
-    else
-        self.mobListContainer:hide()
-        self.shipListContainer:hide()
-        self.playerListContainer:show()
+    if Lucene.targetWindow.currentContainer then
+        Lucene.targetWindow.currentContainer:hide()
     end
+
+    Lucene.targetWindow.currentContainer = windowHandle
+    Lucene.targetWindow.currentContainer:show()
 
     self.activeWindow = name
     self:scheduleUpdate()
@@ -78,18 +73,23 @@ function Lucene.targetWindow:scheduleUpdate()
     end
 
     self.updating = true
-    if self.activeWindow == "mobs" then
-        tempTimer(0.5, function() Lucene.targetWindow:updateMobList() end)
-    elseif self.activeWindow == "ships" then
-        tempTimer(0.5, function() Lucene.targetWindow:updateNearbyShips() end)
-    end
+    tempTimer(0.5, function()
+        Lucene.targetWindow.currentContainer:update()
+
+        self.updating = false
+
+        if self.shouldUpdate then
+            self.shouldUpdate = false
+            self:scheduleUpdate()
+        end
+    end)
 end
-registerAnonymousEventHandler("Lucene.mobAdded", function() Lucene.targetWindow:scheduleUpdate() end)
-registerAnonymousEventHandler("Lucene.mobsUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
-registerAnonymousEventHandler("Lucene.mobRemoved", function() Lucene.targetWindow:scheduleUpdate() end)
-registerAnonymousEventHandler("Lucene.newTarget", function() Lucene.targetWindow:scheduleUpdate() end)
-registerAnonymousEventHandler("Lucene.hunterUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
-registerAnonymousEventHandler("Lucene.shipsUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.mobAdded", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.mobsUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.mobRemoved", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.newTarget", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.hunterUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.shipsUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
 
 Lucene.import("ui/targetWindow/importantTargets")
 Lucene.import("ui/targetWindow/mobWindow")

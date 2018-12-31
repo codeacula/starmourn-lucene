@@ -15,4 +15,10 @@ function Lucene.targetWindow:buildImportantWindow()
     self.importantTargets:setClickCallback([[function()
         Lucene.targetWindow:setActiveWindow("important") 
     end]])
+
+    self.importantListContainer = Lucene.containers.container({
+        name = "importantListContainer",
+        x = 0, y = "10%",
+        height = "90%", width = "100%"
+    }, self.listContainer)
 end

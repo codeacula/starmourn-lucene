@@ -94,23 +94,23 @@ function Lucene.player:takeBalance(balanceName)
     raiseEvent("Lucene."..balanceName..".take")
 end
 
-function Lucene.player.updateGmcp()
+function Lucene.player:updateGmcp()
     local vits = gmcp.Char.Vitals
-    Lucene.player:setBalance(vits.bal)
-    Lucene.player.stats.class = vits.class or Lucene.player.stats.class
-    Lucene.player.stats.em = tonumber(vits.em) or Lucene.player.stats.em
-    Lucene.player.stats.hp = tonumber(vits.hp) or Lucene.player.stats.hp
-    Lucene.player.stats.internal = tonumber(vits.internal) or Lucene.player.stats.internal
-    Lucene.player.stats.maxhp = tonumber(vits.maxhp) or Lucene.player.stats.maxhp
-    Lucene.player.stats.maxpt = tonumber(vits.maxpt) or Lucene.player.stats.maxpt
-    Lucene.player.stats.mind = tonumber(vits.mind) or Lucene.player.stats.mind
-    Lucene.player.stats.muscular = tonumber(vits.muscular) or Lucene.player.stats.muscular
-    Lucene.player.stats.pt = tonumber(vits.pt) or Lucene.player.stats.pt
-    Lucene.player.stats.sensory = tonumber(vits.sensory) or Lucene.player.stats.sensory
-    Lucene.player.stats.wetwiring = tonumber(vits.wetwiring) or Lucene.player.stats.wetwiring
-    Lucene.player.stats.ww = tonumber(vits.ww) or Lucene.player.stats.ww
-    Lucene.player.stats.xp = tonumber(vits.xp) or Lucene.player.stats.xp
+    self:setBalance(vits.bal)
+    self.stats.class = vits.class or self.stats.class
+    self.stats.em = tonumber(vits.em) or self.stats.em
+    self.stats.hp = tonumber(vits.hp) or self.stats.hp
+    self.stats.internal = tonumber(vits.internal) or self.stats.internal
+    self.stats.maxhp = tonumber(vits.maxhp) or self.stats.maxhp
+    self.stats.maxpt = tonumber(vits.maxpt) or self.stats.maxpt
+    self.stats.mind = tonumber(vits.mind) or self.stats.mind
+    self.stats.muscular = tonumber(vits.muscular) or self.stats.muscular
+    self.stats.pt = tonumber(vits.pt) or self.stats.pt
+    self.stats.sensory = tonumber(vits.sensory) or self.stats.sensory
+    self.stats.wetwiring = tonumber(vits.wetwiring) or self.stats.wetwiring
+    self.stats.ww = tonumber(vits.ww) or self.stats.ww
+    self.stats.xp = tonumber(vits.xp) or self.stats.xp
 
-    Lucene.player:checkQueue()
+    self:checkQueue()
 end
-registerAnonymousEventHandler("gmcp.Char.Vitals", "Lucene.player.updateGmcp")
+Lucene.callbacks.register("gmcp.Char.Vitals", function() Lucene.player:updateGmcp() end)

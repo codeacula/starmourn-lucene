@@ -24,13 +24,13 @@ function Lucene.mapper.explored()
     db:add(Lucene.db.rooms, dbRoom)
     Lucene.mapper.exploredCache[dbRoom.num] = dbRoom
 end
-registerAnonymousEventHandler("gmcp.Room.Info", "Lucene.mapper.explored")
+Lucene.callbacks.register("gmcp.Room.Info", Lucene.mapper.explored)
 
 function Lucene.mapper.load()
     local res = db:fetch(Lucene.db.rooms)
 
     for _, room in ipairs(res) do
-        Lucene.mapper.explored[room.num] = room
+        Lucene.mapper.exploredCache[room.num] = room
     end
 end
-registerAnonymousEventHandler("Lucene.bootstrap", "Lucene.hunter.init")
+Lucene.callbacks.register("Lucene.bootstrap", Lucene.mapper.load)

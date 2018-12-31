@@ -18,7 +18,7 @@ function Lucene.room.gmcpMobEntered()
     
     Lucene.room:addMob(gmcp.Char.Items.Add.item)
 end
-registerAnonymousEventHandler("gmcp.Char.Items.Add", "Lucene.room.gmcpMobEntered")
+Lucene.callbacks.register("gmcp.Char.Items.Add", Lucene.room.gmcpMobEntered)
 
 function Lucene.room.gmcpMobList()
     if gmcp.Char.Items.List.location ~= "room" then
@@ -27,7 +27,7 @@ function Lucene.room.gmcpMobList()
     
     Lucene.room:processList(gmcp.Char.Items.List.items)
 end
-registerAnonymousEventHandler("gmcp.Char.Items.List", "Lucene.room.gmcpMobList")
+Lucene.callbacks.register("gmcp.Char.Items.List", Lucene.room.gmcpMobList)
 
 function Lucene.room.gmcpMobRemoved()
     if gmcp.Char.Items.Remove.location ~= "room" then
@@ -36,7 +36,7 @@ function Lucene.room.gmcpMobRemoved()
     
     Lucene.room:removeMob(tonumber(gmcp.Char.Items.Remove.item.id))
 end
-registerAnonymousEventHandler("gmcp.Char.Items.Remove", "Lucene.room.gmcpMobRemoved")
+Lucene.callbacks.register("gmcp.Char.Items.Remove", Lucene.room.gmcpMobRemoved)
 
 function Lucene.room:processList(mobList)
     self.mobs = {}

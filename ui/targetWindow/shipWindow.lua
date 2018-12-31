@@ -1,10 +1,11 @@
--- Ships
-local shipLineTable = {}
+
+local shipWindow = Lucene.objects.targetWindow:new()
+shipWindow.lines ={}
 
 local idwidth = "10%"
 local nameWidth = "50%"
 
-function Lucene.targetWindow:buildShipWindow()
+function shipWindow:build()
     self.shipButton = Lucene.containers.label({
         name = "shipButton"
     }, self.headerBox)
@@ -18,7 +19,7 @@ function Lucene.targetWindow:buildShipWindow()
         }
     ]])
     self.shipButton:setClickCallback([[function()
-        Lucene.targetWindow:setActiveWindow("ships") 
+        Lucene.targetWindow:setActiveWindow(Lucene.targetWindow.subWindows["ships"]) 
     end]])
     
     self.shipListContainer = Lucene.containers.container({
@@ -27,21 +28,21 @@ function Lucene.targetWindow:buildShipWindow()
         height = "90%", width = "100%"
     }, self.listContainer)
     
-    local shipTitleHeader = Lucene.containers.label({
+    self.shipTitleHeader = Lucene.containers.label({
         name = "shipTitleHeader",
         x = 0, y = 0,
         height = px(self.variables.lineHeight), width = nameWidth
     }, self.shipListContainer)
-    shipTitleHeader:echo("Object")
-    shipTitleHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    self.shipTitleHeader:echo("Object")
+    self.shipTitleHeader:setStyleSheet(Lucene.styles.listLineHeader)
     
-    local shipIdHeader = Lucene.containers.label({
+    self.shipIdHeader = Lucene.containers.label({
         name = "shipIdHeader",
         x = nameWidth, y = 0,
         height = px(self.variables.lineHeight), width = idwidth
     }, self.shipListContainer)
-    shipIdHeader:echo("ID")
-    shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
+    self.shipIdHeader:echo("ID")
+    self.shipIdHeader:setStyleSheet(Lucene.styles.listLineHeader)
 end
 
 function Lucene.targetWindow:cleanupShipWindow()
@@ -102,3 +103,5 @@ function Lucene.targetWindow:updateNearbyShips()
         self:scheduleUpdate()
     end
 end
+
+Lucene.targetWindow.subWindows["ships"] = shipWindow

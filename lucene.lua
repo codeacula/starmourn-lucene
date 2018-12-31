@@ -70,6 +70,7 @@ Lucene.boot = function()
     -- Objects
     Lucene.objects = {}
     Lucene.import("objects/affliction")
+    Lucene.import("objects/callback")
     Lucene.import("objects/huntTarget")
     Lucene.import("objects/item")
     Lucene.import("objects/player")
@@ -79,6 +80,7 @@ Lucene.boot = function()
     -- Now let's import them files
     Lucene.import("db/db")
     Lucene.import("utilities")
+    Lucene.import("callbacks")
     Lucene.import("hunter")
     Lucene.import("keypad")
     Lucene.import("mapper")

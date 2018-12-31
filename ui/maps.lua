@@ -42,7 +42,7 @@ Lucene.maps.init = function()
     Lucene.import("maps/mudlet")
     Lucene.import("maps/space")
 end
-registerAnonymousEventHandler("Lucene.bootstrap", "Lucene.maps.init")
+Lucene.callbacks.register("Lucene.bootstrap", Lucene.maps.init)
 
 Lucene.maps.showSpace = function()
     Lucene.maps.mapTab:setStyleSheet(Lucene.styles.chatNormal)
