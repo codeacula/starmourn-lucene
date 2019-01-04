@@ -34,6 +34,12 @@ Lucene.boot = function()
                 ft = "Faction",
                 dt = "Dynasty"
             },
+            factionWeights = {
+                ["N/A"] = 9999,
+                Celestine = 50,
+                Scatterhome = 20,
+                Song = 20
+            },
             hunting = {
                 primary = "bot claw %s",
                 stun = "bot harass %s"

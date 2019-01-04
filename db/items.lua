@@ -33,7 +33,7 @@ end
 function Lucene.items:createItem(gmcpData)
     local newItem = self:new(gmcpData)
     
-    addedEntity, error = db:add(Lucene.db.items, newItem.context)
+    local addedEntity, error = db:add(Lucene.db.items, newItem.context)
 
     if error then Lucene.error(debug.getinfo(1), error) end
 

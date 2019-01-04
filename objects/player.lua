@@ -4,6 +4,14 @@ local Player = {
 
 Player.__index = Player
 
+Player.__lt = function(playera, playerb)
+    if playera:weight() ~= playerb:weight() then
+        return playera:weight() < playerb:weight()
+    end
+
+    return playera:name() < playerb:name()
+end
+
 function Player:addDeath()
     self:deaths(self:deaths() + 1)
 end
@@ -16,6 +24,12 @@ function Player:age(val)
     if val == nil then return self.context.age end
 
     self.context.age = tonumber(val)
+end
+
+function Player:ally(val)
+    if val == nil then return ntob(self.context.ally) end
+
+    self.context.ally = bton(val)
 end
 
 function Player:caprank(val)
@@ -31,12 +45,15 @@ function Player:class(val)
 end
 
 function Player:color()
-    if self:enemy() then return "Enemy" end
-    if self:faction() == "Celestine" then return "Celestine" end
-    if self:faction() == "Song" then return "Song" end
-    if self:faction() == "Scatterhome" then return "Scatterhome" end
+    local choiceColor = self:faction()
+    if self:enemy() then choiceColor = "Enemy" end
+    if self:faction() == "N/A" then choiceColor = "None" end
 
-    return "None"
+    if not color_table[choiceColor] then
+        choiceColor = "None"
+    end
+
+    return choiceColor
 end
 
 function Player:deaths(val)
@@ -87,16 +104,14 @@ function Player:honrank(val)
     self.context.honrank = tonumber(val)
 end
 
+function Player:identifier()
+    return self.context.name
+end
+
 function Player:kills(val)
     if val == nil then return self.context.kills end
 
     self.context.kills = tonumber(val)
-end
-
-function Player:fullname(val)
-    if val == nil then return self.context.fullname end
-
-    self.context.fullname = val
 end
 
 function Player:lawless(val)
@@ -142,6 +157,17 @@ function Player:race(val)
     if val == nil then return self.context.race end
 
     self.context.race = val
+end
+
+function Player:weight()
+    if self:enemy() then return 2 end
+    if self:ally() == 1 then return 1 end
+
+    if Lucene.settings.factionWeights[self:faction()] then
+        return Lucene.settings.factionWeights[self:faction()]
+    end
+
+    return 999
 end
 
 function Player:xprank(val)

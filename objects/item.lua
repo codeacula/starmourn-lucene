@@ -45,6 +45,10 @@ function Item:id(val)
     self.context.id = tonumber(val)
 end
 
+function Item:identifier()
+    return self.context.id
+end
+
 function Item:ignore(flag)
     if flag == nil then return ntob(self.context.ignore) end
 

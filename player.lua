@@ -1,6 +1,7 @@
 Lucene.player = {
     commandQueue = {},
     sentBalance = false,
+    skills = {},
     timeoutHandle = nil,
     timeoutPeriod = 3
 }
@@ -49,6 +50,32 @@ function Lucene.player:giveBalance(balanceName)
     raiseEvent("Lucene."..balanceName..".give")
 end
 
+function Lucene.player:handleGroup()
+    local name = gmcp.Char.Skills.List.group
+    self.skills[name] = {}
+
+    for _, skill in ipairs(gmcp.Char.Skills.List.list) do
+        self.skills[name][skill] = true
+    end
+end
+Lucene.callbacks.register("gmcp.Char.Skills.List", function() Lucene.player:handleGroup() end)
+
+function Lucene.player:hasSkill(skillName, skillGroup)
+    if skillGroup then
+        if Lucene.player.skills[skillGroup] and Lucene.player.skills[skillGroup][skillName] then
+            return true
+        end
+
+        return false
+    end
+
+    for groupName, skills in pairs(Lucene.player.skills) do
+        if skills[skillName] then return true end
+    end
+
+    return false
+end
+
 function Lucene.player:haveCommandBal()
     if self.stats.bal == 0 or self.sentBalance == true then
         return false
@@ -61,6 +88,13 @@ function Lucene.player:resetBalance()
     self.sentBalance = false
     self:cancelBalanceTimer()
 end
+
+function Lucene.player:requestSkills()
+    for _, group in ipairs(gmcp.Char.Skills.Groups) do
+        sendGMCP([[Char.Skills.Get { "group": "]]..group.name..[["}]])
+    end
+end
+Lucene.callbacks.register("gmcp.Char.Skills.Groups", function() Lucene.player:requestSkills() end)
 
 function Lucene.player:send(command, ...)
     Lucene.send(command, unpack(arg))

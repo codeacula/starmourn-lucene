@@ -7,7 +7,7 @@ function Lucene.huntTargets:create(identifier, weight)
     if not id then name = identifier end
 
     local newTarget = self:new(id, name, weight)
-    addedEntity, error = db:add(Lucene.db.huntTargets, newTarget.context)
+    local addedEntity, error = db:add(Lucene.db.huntTargets, newTarget.context)
     
     if error then Lucene.error(debug.getinfo(1), error) end
 

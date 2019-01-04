@@ -32,12 +32,13 @@ HuntTargetSchema = {
 
 PlayerSchema = {
     age = 0,
+    ally = 0,
     caprank = 0,
     class = "",
     deaths = 0,
     enemy = 0,
     explorer = 0,
-    faction = "",
+    faction = "N/A",
     factionRank = "",
     fullname = "",
     gender = "",

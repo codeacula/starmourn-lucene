@@ -10,6 +10,10 @@ function TargetWindow:build()
 
 end
 
+function TargetWindow:clean()
+
+end
+
 function TargetWindow:hide()
 
 end
@@ -21,10 +25,6 @@ function TargetWindow:new(name)
     newTargetWindow.name = name
 
     return newTargetWindow
-end
-
-function TargetWindow:reset()
-
 end
 
 function TargetWindow:show()

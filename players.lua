@@ -30,6 +30,34 @@ function Lucene.players:addPlayer(name)
     return player
 end
 
+function Lucene.players:ally(name)
+    local player = self:getPlayer(name)
+
+    if player:enemy() then
+        player:enemy(false)
+        send("unenemy "..name)
+    end
+
+    player:ally(true)
+    self:save(player)
+    send("ally "..name)
+    raiseEvent("Lucene.playersUpated")
+end
+
+function Lucene.players:enemy(name)
+    local player = self:getPlayer(name)
+
+    if player:ally() then
+        player:ally(false)
+        send("unally "..name)
+    end
+
+    player:enemy(true)
+    self:save(player)
+    send("enemy "..name)
+    raiseEvent("Lucene.playersUpated")
+end
+
 function Lucene.players:finishCheck()
     self:save(self.currentlyChecking)
     self.checkingHonors = false
@@ -107,6 +135,8 @@ Lucene.callbacks.register("Lucene.bootstrap", function() Lucene.players:loadName
 function Lucene.players:playerEntered()
     local player = self:getPlayer(gmcp.Room.AddPlayer.name)
     table.insert(self.here, player)
+
+    raiseEvent("Lucene.playersEntered")
 end
 Lucene.callbacks.register("gmcp.Room.AddPlayer", function() Lucene.players:playerEntered() end)
 
@@ -116,6 +146,8 @@ function Lucene.players:playerLeft()
             table.remove(self.here, i)
         end
     end
+
+    raiseEvent("Lucene.playersLeft")
 end
 Lucene.callbacks.register("gmcp.Room.RemovePlayer", function() Lucene.players:playerLeft() end)
 
@@ -146,10 +178,12 @@ end
 Lucene.callbacks.register("sysDownloadDone", function(fileLocation) Lucene.players:processCharacterList(fileLocation) end)
 
 function Lucene.players:processHere()
+    self.here = {}
     for _, gmcpPlayer in ipairs(gmcp.Room.Players) do
         local player = self:getPlayer(gmcpPlayer.name)
         table.insert(self.here, player)
     end
+    raiseEvent("Lucene.playersUpated")
 end
 Lucene.callbacks.register("gmcp.Room.Players", function() Lucene.players:processHere() end)
 
@@ -180,4 +214,22 @@ end
 
 function Lucene.players:startCheck(playerName)
     self.currentlyChecking = self:getPlayer(playerName)
+end
+
+function Lucene.players:unally(name)
+    local player = self:getPlayer(name)
+
+    player:ally(false)
+    self:save(player)
+    send("unally "..name)
+    raiseEvent("Lucene.playersUpated")
+end
+
+function Lucene.players:unenemy(name)
+    local player = self:getPlayer(name)
+
+    player:enemy(false)
+    self:save(player)
+    send("unenemy "..name)
+    raiseEvent("Lucene.playersUpated")
 end

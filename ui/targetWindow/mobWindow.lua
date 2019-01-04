@@ -8,6 +8,7 @@ function mobWindow:build()
     self.tabButton:echo("<center>M")
     self.tabButton:setStyleSheet([[
         QLabel {
+            border-top-left-radius: 10px;
             background: rgba(24, 204, 138, .4);
         }
         QLabel:hover {
@@ -56,9 +57,13 @@ function mobWindow:build()
     self.tabButton:setClickCallback("Lucene.targetWindow.headerCallback", self.tabIndex)
 end
 
-function mobWindow:cleanupMobWindow()
+function mobWindow:clean()
     for _, v in ipairs(self.mobs) do
         Lucene.containers.remove(v)
+    end
+
+    for i = 1, 100 do
+        hideWindow("mobItem"..i)
     end
 
     self.mobs = {}
@@ -68,12 +73,6 @@ function mobWindow:hide()
     self.container:hide()
 end
 
-function mobWindow:reset()
-    for i = 1, 100 do
-        hideWindow("mobItem"..i)
-    end
-end
-
 function mobWindow:show()
     self.container:show()
 end
@@ -81,7 +80,7 @@ end
 function mobWindow:update()
     local i = 1
     
-    self:cleanupMobWindow()
+    self:clean()
 
     table.sort(Lucene.room.mobs)
 

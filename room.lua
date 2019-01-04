@@ -61,15 +61,13 @@ function Lucene.room:removeMob(itemNumber)
 
     i = #self.mobs
 
-    while i ~= 0 do
+    for i = #self.mobs, 1, -1 do
         local mobInfo = self.mobs[i]
 
-        if mobInfo.id == itemNumber then
+        if mobInfo:id() == itemNumber then
             table.remove(self.mobs, i)
             raiseEvent("Lucene.mobRemoved", mobInfo)
         end
-
-        i = i - 1
     end
 
     raiseEvent("Lucene.mobsUpdated")

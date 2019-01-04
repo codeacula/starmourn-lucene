@@ -47,7 +47,9 @@ end
 
 function Lucene.targetWindow:clean()
     -- Attempts to reset/clean the UI
-    self:scrubMobs()
+    for _, window in pairs(self.subWindows) do
+        window:clean()
+    end
 end
 
 function Lucene.targetWindow.headerCallback(index)
@@ -77,14 +79,14 @@ function Lucene.targetWindow:scheduleUpdate()
     end
 
     self.updating = true
-    tempTimer(0.5, function()
+    tempTimer(0, function()
         Lucene.targetWindow.currentContainer:update()
 
-        self.updating = false
+        Lucene.targetWindow.updating = false
 
-        if self.shouldUpdate then
-            self.shouldUpdate = false
-            self:scheduleUpdate()
+        if Lucene.targetWindow.shouldUpdate then
+            Lucene.targetWindow.shouldUpdate = false
+            Lucene.targetWindow:scheduleUpdate()
         end
     end)
 end
@@ -93,9 +95,11 @@ Lucene.callbacks.register("Lucene.mobsUpdated", function() Lucene.targetWindow:s
 Lucene.callbacks.register("Lucene.mobRemoved", function() Lucene.targetWindow:scheduleUpdate() end)
 Lucene.callbacks.register("Lucene.newTarget", function() Lucene.targetWindow:scheduleUpdate() end)
 Lucene.callbacks.register("Lucene.hunterUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.playersLeft", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.playersEntered", function() Lucene.targetWindow:scheduleUpdate() end)
+Lucene.callbacks.register("Lucene.playersUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
 Lucene.callbacks.register("Lucene.shipsUpdated", function() Lucene.targetWindow:scheduleUpdate() end)
 
-Lucene.import("ui/targetWindow/importantTargets")
 Lucene.import("ui/targetWindow/mobWindow")
 Lucene.import("ui/targetWindow/shipWindow")
 Lucene.import("ui/targetWindow/playerWindow")
