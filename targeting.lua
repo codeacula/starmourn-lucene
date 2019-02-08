@@ -9,6 +9,7 @@ function Lucene.targeting:setTarget(name)
     if oldTar ~= name and name then
         send("st "..name)
         Lucene.warn(("Target switched. New target: <LuceneDanger>%s"):format(name))
+        sendGMCP("IRE.Target.Set \""..name.."\"")
         raiseEvent("Lucene.newTarget")
     elseif oldTar and not name then
         send("st none")
